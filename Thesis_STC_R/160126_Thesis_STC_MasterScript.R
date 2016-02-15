@@ -19,7 +19,9 @@ getwd()
 # install.packages("sp")
 # install.packages("rgeos")
 # install.packages("ggplot2")
-
+# install.packages("rgl")
+# install.packages("dismo")
+# install.packages("XML")
 ### Load Libraries
 
 library("SpatialEpi")
@@ -30,8 +32,11 @@ library("rgeos")
 library("rgdal")
 library("sp")
 library("ggplot2")
-
+library("rgl")
+library("dismo")
+library("XML")
 ### Load Functions
 
 #Source("R/")
 
+######The function writeWebGL() is used to write the current scene to HTML:
