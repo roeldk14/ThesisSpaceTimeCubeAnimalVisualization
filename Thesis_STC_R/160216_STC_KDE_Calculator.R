@@ -4,3 +4,4 @@
 ### Calculate a KDE for a specified dataset in both time and space
 
 STC_KDE_Calculator<- function(Dataset) {}
+
