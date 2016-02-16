@@ -1,9 +1,10 @@
-### Movebank_CSV File Cleaner Script Space_Time_Cube_Animal_Visualization 
+### STC_Movebank_CSV_DF_Writer_Script Space_Time_Cube_Animal_Visualization 
 ### 15\02\16 
 
+### Opens CSV files and writes them out as a Dataframe Specifically aimed at Movebank Files
 
 
-Movebank_CSV_FileLoader <- function(CSV_File) {}
+STC_Movebank_CSVtoDF_Writer <- function(CSV_File) {}
 
 ## open CSV file
 
@@ -39,19 +40,6 @@ head(TimeDate)
 head(TimeDateNumeric)
 head(Swainsons_STC_Data)
 
-
-## Select specific period of interest
-
-## periods
-
-t1 <- as.Date("1995-01-01")
-t2 <- as.Date("1998-12-31")
-
-## subset data
-
-Swainsons_STC_Data_1995.df <- Swainsons_STC_Data.df[Swainsons_STC_Data.df$TimeDate %in% t1:t2,]
-
-head(Swainsons_STC_Data_1995.df)
 
 plottitle <- "Swainsons_Hawk_Test"
 

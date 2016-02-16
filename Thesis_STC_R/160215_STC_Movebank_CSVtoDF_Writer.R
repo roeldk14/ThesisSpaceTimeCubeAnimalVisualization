@@ -1,9 +1,10 @@
-### Movebank_CSV File Cleaner Script Space_Time_Cube_Animal_Visualization 
+### STC_Movebank_CSVtoDF_Writer_Script Space_Time_Cube_Animal_Visualization 
 ### 15\02\16 
 
+### Opens CSV files and writes them out as a Dataframe Specifically aimed at Movebank Files
 
 
-Movebank_CSV_FileLoader <- function(CSV_File) {}
+STC_Movebank_CSVtoDF_Writer <- function(CSV_File_Pathway) {}
 
 ## open CSV file
 
@@ -38,27 +39,3 @@ Swainsons_STC_Data.df <- data.frame("Lon" = Lon, "Lat" = Lat, "TimeDate" = TimeD
 head(TimeDate)
 head(TimeDateNumeric)
 head(Swainsons_STC_Data)
-
-
-## Select specific period of interest
-
-## periods
-
-t1 <- as.Date("1995-01-01")
-t2 <- as.Date("1998-12-31")
-
-## subset data
-
-Swainsons_STC_Data_1995.df <- Swainsons_STC_Data.df[Swainsons_STC_Data.df$TimeDate %in% t1:t2,]
-
-head(Swainsons_STC_Data_1995.df)
-
-plottitle <- "Swainsons_Hawk_Test"
-
-plot3d(Swainsons_STC_Data_1995.df$Lon,Swainsons_STC_Data_1995.df$Lat,Swainsons_STC_Data_1995.df$TimeDate, xlim=range(Swainsons_STC_Data_1995.df$Lon), ylim=range(Swainsons_STC_Data_1995.df$Lat), 
-       zlim=range(Swainsons_STC_Data_1995.df$TimeDateNumeric), ticktype="detailed", xlab="longitude", ylab="latitude", 
-       zlab="Date",col = as.numeric(Swainsons_STC_Data_1995.df$Identifier), type="p", main=plottitle)
-
-help("Plot3D")
-
-
