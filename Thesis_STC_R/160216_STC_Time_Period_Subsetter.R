@@ -8,7 +8,7 @@
 STC_Period_Selector <- function(Dataset,T1,T2) {}
 
 t1 <- as.Date("1995-01-01")
-t2 <- as.Date("1998-12-31")
+t2 <- as.Date("1995-12-31")
 
 ## subset data
 

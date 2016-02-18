@@ -12,47 +12,62 @@ head(Swainsons_STC_Data_1995.df)
 start_date <- as.Date.character("1995-01-01")
 end_date <- as.Date.character("1995-12-31")
 Identifier_list <-list(unique(Swainsons_STC_Data_1995.df$Identifier))
+head(Identifier_list)
 Movement_Calendar <- seq.Date(from = start_date,to = end_date,by = 1)
-
+head(Movement_Calendar)
+listlon <- double()
+listlat <- double()
+listidentifier <- double()
+listdate <- double()
 
 for (i in Identifier_list) {
-  listlon
-  SW.df <- subset(Swainsons_STC_Data_1995.df,Swainsons_STC_Data_1995.df$Identifier ==  Identifier_list[i])
+  SW.df <- Swainsons_STC_Data_1995.df[Swainsons_STC_Data_1995.df$Identifier == i,]
+  
   for (j in Movement_Calendar) {
-    if (SW.df$TimeDate == j) {
+    
+    for (k in length(SW.df$TimeDate)) {
       
-      listx <- list()
-      listy <- list()
-      listz <- list()
-      
-      CurrentRecord <- subset(SW.df,SW.df$ TimeDate == j)
-      for k in length(CurrentRecord)
-      
-      lat00 <- CurrentRecord$Lat[k]
-      lon00 <- CurrentRecord$Lon[k]
-      
-      lat1 <- lat00 * pi/180
-      lon1 <- lon00 * pi/180
-      
-      x1 <- cos(lat1) * cos(lon1)
-      y1 <- cos(lat1) * sin(lon1)
-      z1 <- sin(lat1)
-      
-      c(listx,x1)
-      c(listy,y1)
-      c(listz,z1)
-      
-      x <- (sum(listx))/(length(CurrentRecord))
-      y <- (sum(listy))/(length(CurrentRecord))
-      z <- (sum(listz))/(length(CurrentRecord))
-      
-      lon <- atan2(y,x)
-      hyp <- sqrt(x*x+y*y)
-      lat <- atan2(z,hyp)
-      
-      lat <- lat * 180/pi
-      lon <- lon * 180/pi
-      
+      if (SW.df$TimeDate == j) {
+        
+        doublex <- double()
+        doubley <- double()
+        doublez <- double()
+        
+        CurrentRecord <- SW.df[SW.df$TimeDate == j,]
+        
+        for (k in length(CurrentRecord)) {
+          
+          lat00 <- CurrentRecord$Lat[k]
+          lon00 <- CurrentRecord$Lon[k]
+          
+          lat1 <- lat00 * pi/180
+          lon1 <- lon00 * pi/180
+          
+          x1 <- cos(lat1) * cos(lon1)
+          y1 <- cos(lat1) * sin(lon1)
+          z1 <- sin(lat1)
+          
+          doublex <- c(doublex,x1)
+          doubley <- c(doubley,y1)
+          doublez <- c(doublez,z1)
+          
+          x <- (sum(doublex))/(length(CurrentRecord))
+          y <- (sum(doubley))/(length(CurrentRecord))
+          z <- (sum(doublez))/(length(CurrentRecord))
+          
+          lon <- atan2(y,x)
+          hyp <- sqrt(x*x+y*y)
+          lat <- atan2(z,hyp)
+          
+          lat <- lat * 180/pi
+          lon <- lon * 180/pi
+          
+          listlat <- c(listlat,lat)
+          listlon <- c(listlon,lon)
+          listidentifier <- c(listidentifier,Identifier_list[i])
+          listdate <- c(listdate,Movement_Calendar[j])
+       }
+      }
     }
       
 } 

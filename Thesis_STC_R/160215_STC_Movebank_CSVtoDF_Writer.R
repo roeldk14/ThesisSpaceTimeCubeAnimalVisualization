@@ -38,4 +38,4 @@ Swainsons_STC_Data.df <- data.frame("Lon" = Lon, "Lat" = Lat, "TimeDate" = TimeD
 
 head(TimeDate)
 head(TimeDateNumeric)
-head(Swainsons_STC_Data)
+head(Swainsons_STC_Data.df)
