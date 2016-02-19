@@ -5,73 +5,101 @@
 
 Averaged_Pathway_Calculator <- function(Dataset) {}
 
-head(Swainsons_STC_Data_1995.df)
-
-##construct Identification list
+##construct Identification list and datum 
 
 start_date <- as.Date.character("1995-01-01")
 end_date <- as.Date.character("1995-12-31")
-Identifier_list <-list(unique(Swainsons_STC_Data_1995.df$Identifier))
-head(Identifier_list)
+
+Identifiers <-unique(Swainsons_STC_Data_1995.df$Identifier)
+
+## display identifiers
+Identifiers
+
+## create movement claendar
 Movement_Calendar <- seq.Date(from = start_date,to = end_date,by = 1)
 head(Movement_Calendar)
-listlon <- double()
-listlat <- double()
-listidentifier <- double()
-listdate <- double()
 
-for (i in Identifier_list) {
-  SW.df <- Swainsons_STC_Data_1995.df[Swainsons_STC_Data_1995.df$Identifier == i,]
+lon.data <- c()
+lat.data <- c()
+identifier.data <- c()
+date.data <- c()
+
+i = 1
+
+for (i in length(Identifiers)) {
   
-  for (j in Movement_Calendar) {
+  SW.df <- Swainsons_STC_Data_1995.df[Swainsons_STC_Data_1995.df$Identifier == Identifiers[i],]
+  
+  j = 230
+  
+  for (j in length(Movement_Calendar)) {
+    
+    x.list <- c()
+    y.list <- c()
+    z.list <- c()
+    
+    k = 1
+    countk = 0
     
     for (k in length(SW.df$TimeDate)) {
       
-      if (SW.df$TimeDate == j) {
+      if (SW.df$TimeDate[k] == Movement_Calendar[j]) {
         
-        doublex <- double()
-        doubley <- double()
-        doublez <- double()
+        CurrentRecord <- SW.df[k,]
+          
+        lat00 <- CurrentRecord$Lat
+        lon00 <- CurrentRecord$Lon
+          
+        lat1 <- lat00 * pi/180
+        lon1 <- lon00 * pi/180
+          
+        x1 <- cos(lat1) * cos(lon1)
+        y1 <- cos(lat1) * sin(lon1)
+        z1 <- sin(lat1)
+          
+        x.list <- c(x.list,x1)
+        y.list <- c(y.list,y1)
+        z.list <- c(z.list,z1)
         
-        CurrentRecord <- SW.df[SW.df$TimeDate == j,]
-        
-        for (k in length(CurrentRecord)) {
-          
-          lat00 <- CurrentRecord$Lat[k]
-          lon00 <- CurrentRecord$Lon[k]
-          
-          lat1 <- lat00 * pi/180
-          lon1 <- lon00 * pi/180
-          
-          x1 <- cos(lat1) * cos(lon1)
-          y1 <- cos(lat1) * sin(lon1)
-          z1 <- sin(lat1)
-          
-          doublex <- c(doublex,x1)
-          doubley <- c(doubley,y1)
-          doublez <- c(doublez,z1)
-          
-          x <- (sum(doublex))/(length(CurrentRecord))
-          y <- (sum(doubley))/(length(CurrentRecord))
-          z <- (sum(doublez))/(length(CurrentRecord))
-          
-          lon <- atan2(y,x)
-          hyp <- sqrt(x*x+y*y)
-          lat <- atan2(z,hyp)
-          
-          lat <- lat * 180/pi
-          lon <- lon * 180/pi
-          
-          listlat <- c(listlat,lat)
-          listlon <- c(listlon,lon)
-          listidentifier <- c(listidentifier,Identifier_list[i])
-          listdate <- c(listdate,Movement_Calendar[j])
-       }
+        countk = countk + 1
       }
-    }
       
+      k = k + 1
+      
+    } 
+    
+    x <- (sum(x.list)/countk)
+    y <- (sum(y.list)/countk)
+    z <- (sum(z.list)/countk)
+    
+    print(paste("count of matching dates",countk))
+    
+    lon <- atan2(y,x)
+    hyp <- sqrt(x*x+y*y)
+    lat <- atan2(z,hyp)
+          
+    lat <- lat * 180/pi
+    lon <- lon * 180/pi
+          
+    lat.data <- c(lat.data,lat)
+    lon.data <- c(lon.data,lon)
+    identifier.data <- c(identifier.data,Identifiers[i])
+    date.data <- c(date.data,Movement_Calendar[j])
+    
+    print(paste("current identifier",Identifiers[i]))
+    print(paste("current date",Movement_Calendar[j]))
+    
+    print("repeat")
+  
+    j = j + 1
+  
+  }
+  
+  i = i + 1
+  
 } 
-}
+
+length(unique(SW.df$TimeDate))
 
 SW1 <- subset(Swainsons_STC_Data_1995.df,Swainsons_STC_Data_1995.df$Identifier ==  "SW1")
 SW3 <- subset(Swainsons_STC_Data_1995.df,Swainsons_STC_Data_1995.df$Identifier ==  "SW3")

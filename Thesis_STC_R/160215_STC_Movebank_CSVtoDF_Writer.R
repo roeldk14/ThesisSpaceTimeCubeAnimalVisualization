@@ -31,7 +31,7 @@ TimeDateLocalNumeric <- as.numeric(TimeDateLocal)
 
 Swainsons_STC_Data.df <- data.frame("Lon" = Lon, "Lat" = Lat, "TimeDate" = TimeDate, "TimeDateNumeric" = TimeDateNumeric,
                                  "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,
-                                 "TimezoneLocal" = TimezoneLocal, "TimeDateLocal" = TimeDateLocal, "TimeDateLocalNumeric" = TimeDateLocalNumeric)
+                                 "TimezoneLocal" = TimezoneLocal, "TimeDateLocal" = TimeDateLocal, "TimeDateLocalNumeric" = TimeDateLocalNumeric,stringsAsFactors = F)
 
 
 ## check data columns and new data frame
