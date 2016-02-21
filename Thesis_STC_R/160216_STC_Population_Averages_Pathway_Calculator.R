@@ -5,6 +5,40 @@
 
 Averaged_Pathway_Calculator <- function(Dataset) {}
 
+geocentrecalcPt1 <- function(lat,lon) {
+
+  ## calculating a central geo point part 1
+  ## convert to cartesian coordinates
+  lat1 <- lat * pi/180
+  lon1 <- lon * pi/180
+  
+  x1 <- cos(lat1) * cos(lon1)
+  y1 <- cos(lat1) * sin(lon1)
+  z1 <- sin(lat1)
+  
+  return(c(x1,y1,z1))
+}
+
+geocentrecalcPt2 <- function(xlist,ylist,zlist) {
+  
+  ## calculating a central geo point part 2
+  
+  ## calculate average x, y and z coordinates
+  x <- mean(x.list)
+  y <- mean(y.list)
+  z <- mean(z.list)
+  
+  lon <- atan2(y,x)
+  hyp <- sqrt(x * x + y * y)
+  lat <- atan2(z,hyp)
+  
+  lat <- lat * 180 / pi
+  lon <- lon * 180 / pi
+  
+  return(c(lat,lon))
+  
+}
+
 ##construct Identification list and datum 
 
 start_date <- as.Date.character("1995-01-01")
@@ -19,148 +53,50 @@ Identifiers
 Movement_Calendar <- seq.Date(from = start_date,to = end_date,by = 1)
 head(Movement_Calendar)
 
-lon.data <- c()
-lat.data <- c()
-identifier.data <- c()
-date.data <- c()
+lon.list <- c()
+lat.list <- c()
+Identifier.names <- c()
+TimeDates <- c()
 
-i = 1
-
-for (i in length(Identifiers)) {
+for (i in 1:length(Identifiers)) {
+  SW.Individual.df <-
+    Swainsons_STC_Data_1995.df[Swainsons_STC_Data_1995.df$Identifier == Identifiers[i],]
   
-  SW.df <- Swainsons_STC_Data_1995.df[Swainsons_STC_Data_1995.df$Identifier == Identifiers[i],]
-  
-  j = 230
-  
-  for (j in length(Movement_Calendar)) {
+  for (j in 1:length(Movement_Calendar)) {
+    Truecheck <- SW.Individual.df$TimeDate == Movement_Calendar[j]
     
-    x.list <- c()
-    y.list <- c()
-    z.list <- c()
-    
-    k = 1
-    countk = 0
-    
-    for (k in length(SW.df$TimeDate)) {
+    if (length(Truecheck[Truecheck == "TRUE"]) > 0) {
+      SW.Individual.Selection.df <-
+        SW.Individual.df[SW.Individual.df$TimeDate == Movement_Calendar[j],]
       
-      if (SW.df$TimeDate[k] == Movement_Calendar[j]) {
+      x.list <- c()
+      y.list <- c()
+      z.list <- c()
+      
+      for (k in 1:nrow(SW.Individual.Selection.df)) {
+        CurrentRecord <- SW.Individual.Selection.df[k,]
         
-        CurrentRecord <- SW.df[k,]
-          
         lat00 <- CurrentRecord$Lat
         lon00 <- CurrentRecord$Lon
-          
-        lat1 <- lat00 * pi/180
-        lon1 <- lon00 * pi/180
-          
-        x1 <- cos(lat1) * cos(lon1)
-        y1 <- cos(lat1) * sin(lon1)
-        z1 <- sin(lat1)
-          
-        x.list <- c(x.list,x1)
-        y.list <- c(y.list,y1)
-        z.list <- c(z.list,z1)
         
-        countk = countk + 1
+        xyzvalues <- geocentrecalcPt1(lat = lat00,lon = lon00)
+        
+        x.list <- append(x.list,xyzvalues[1])
+        y.list <- append(y.list,xyzvalues[1])
+        z.list <- append(z.list,xyzvalues[1])
+        
       }
       
-      k = k + 1
       
-    } 
-    
-    x <- (sum(x.list)/countk)
-    y <- (sum(y.list)/countk)
-    z <- (sum(z.list)/countk)
-    
-    print(paste("count of matching dates",countk))
-    
-    lon <- atan2(y,x)
-    hyp <- sqrt(x*x+y*y)
-    lat <- atan2(z,hyp)
-          
-    lat <- lat * 180/pi
-    lon <- lon * 180/pi
-          
-    lat.data <- c(lat.data,lat)
-    lon.data <- c(lon.data,lon)
-    identifier.data <- c(identifier.data,Identifiers[i])
-    date.data <- c(date.data,Movement_Calendar[j])
-    
-    print(paste("current identifier",Identifiers[i]))
-    print(paste("current date",Movement_Calendar[j]))
-    
-    print("repeat")
-  
-    j = j + 1
-  
+      latlonvalues <- geocentrecalcPt2(x.list,y.list,z.list)
+      
+      lat.list <- append(lat.list,latlonvalues[1])
+      lon.list <- append(lon.list,latlonvalues[2])
+      Identifier.names <- append(Identifier.names,Identifiers[i])
+      TimeDates <- append(TimeDates,Movement_Calendar[j])
+      
+    }
   }
-  
-  i = i + 1
   
 } 
 
-length(unique(SW.df$TimeDate))
-
-SW1 <- subset(Swainsons_STC_Data_1995.df,Swainsons_STC_Data_1995.df$Identifier ==  "SW1")
-SW3 <- subset(Swainsons_STC_Data_1995.df,Swainsons_STC_Data_1995.df$Identifier ==  "SW3")
-head(SW1)
-head(SW3)
-
-
-
-
-
-
-
-lat01 <- Swainsons_STC_Data_1995.df$Lat[1]
-lon01 <- Swainsons_STC_Data_1995.df$Lon[1]
-
-## calculate midpoint
-
-## convert to cartesian coordinates
-
-lat1 <- lat01 * pi/180
-lon1 <- lon01 * pi/180
-
-x1 <- cos(lat1) * cos(lon1)
-y1 <- cos(lat1) * sin(lon1)
-z1 <- sin(lat1)
-
-W1 <- 1
-
-lat02 <- Swainsons_STC_Data_1995.df$Lat[2]
-lon02 <- Swainsons_STC_Data_1995.df$Lon[2]
-
-## calculate midpoint 
-
-lat2 <- lat02 * pi/180
-lon2 <- lon02 * pi/180
-
-x2 <- cos(lat2) * cos(lon2)
-y2 <- cos(lat2) * sin(lon2)
-z2 <- sin(lat2)
-
-W2 <- 1
-
-## step 2 calculate weighted average x, y and z coordinates
-
-W1 + W2
-
-x <- ((x1*W1) + (x2 * W2))/2
-y <- ((y1*W1) + (y2 * W2))/2
-z <- ((z1*W1) + (z2 * W2))/2
-
-lon <- atan2(y,x)
-hyp <- sqrt(x*x+y*y)
-lat <- atan2(z,hyp)
-
-lat <- lat * 180/pi
-lon <- lon * 180/pi
-
-lat
-lon
-
-lat01
-lon10
-lat02
-lon02

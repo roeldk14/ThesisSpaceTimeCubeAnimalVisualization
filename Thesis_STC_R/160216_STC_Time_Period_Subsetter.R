@@ -12,7 +12,7 @@ t2 <- as.Date("1995-12-31")
 
 ## subset data
 
-Swainsons_STC_Data_1995.df <- Swainsons_STC_Data.df[Swainsons_STC_Data.df$TimeDate %in% t1:t2,]
+Swainsons_STC_Data_1995.df <- Swainsons_STC_Data.df[Swainsons_STC_Data.df$TimeDate %in% t1:t2]
 
 head(Swainsons_STC_Data_1995.df)
 
