@@ -9,7 +9,7 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   ## open CSV file
   
   Animal_dataset <-
-    read.csv(file = CSV_File_Pathway,stringsAsFactors = FALSE)
+    read.csv(file = CSV_File_Pathway,stringsAsFactors = F)
   
   ## retrieve data columns of interest
   
@@ -28,14 +28,15 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   
   STC_animal_data.df <-
     data.frame(
-      "Lon" = Lon, "Lat" = Lat, "TimeDate" = TimeDate, "TimeDateNumeric" = TimeDateNumeric,
+      "long" = Lon, "lat" = Lat, "TimeDate" = TimeDate, "TimeDateNumeric" = TimeDateNumeric,
       "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,
       "TimezoneLocal" = TimezoneLocal, "TimeDateLocal" = TimeDateLocal, "TimeDateLocalNumeric" = TimeDateLocalNumeric,stringsAsFactors = F
     )
   
 }
 ## check data columns and new data frame
-typeof(Identifier[1])
-head(TimeDate)
-head(TimeDateNumeric)
-head(Swainsons_STC_Data.df$Identifier)
+# typeof(Identifier[1])
+# head(TimeDate)
+# head(TimeDateNumeric)
+# head(Swainsons_STC_Data.df$Identifier)
+# typeof(Swainsons_STC_Data.df$Identifier[1])

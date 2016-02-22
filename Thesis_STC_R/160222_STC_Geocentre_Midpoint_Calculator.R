@@ -7,16 +7,16 @@
 
 ## calculating a central geo point part 1
 
-geocentrecalcPt1 <- function(lon,lat) {
+geocentrecalcPt1 <- function(long,lat) {
   ## convert to cartesian coordinates
   
-  lon1 <- lon * pi / 180
+  long1 <- long * pi / 180
   lat1 <- lat * pi / 180
   
   ## calculate curvature x,y,z values
   
-  x1 <- cos(lat1) * cos(lon1)
-  y1 <- cos(lat1) * sin(lon1)
+  x1 <- cos(lat1) * cos(long1)
+  y1 <- cos(lat1) * sin(long1)
   z1 <- sin(lat1)
   
   return(c(x1,y1,z1))
@@ -33,15 +33,15 @@ geocentrecalcPt2 <- function(xlist,ylist,zlist) {
   
   ## transform back to cartesian coordinates
   
-  lon <- atan2(y,x)
+  long <- atan2(y,x)
   hyp <- sqrt(x * x + y * y)
   lat <- atan2(z,hyp)
   
-  ## calculate average lon and lat
+  ## calculate average long and lat
   
-  lon <- lon * 180 / pi
+  long <- long * 180 / pi
   lat <- lat * 180 / pi
   
-  return(c(lon,lat))
+  return(c(long,lat))
   
 }

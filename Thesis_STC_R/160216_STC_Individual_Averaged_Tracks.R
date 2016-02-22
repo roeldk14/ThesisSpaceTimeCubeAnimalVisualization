@@ -3,11 +3,53 @@
 
 ### Calculates the Individual averaged tracks from multiple dates for multiple individuals for a given dataset
 
-Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
-
-  ## source neccescary geocentre calculator script
+STC_Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
   
-  source("Thesis_STC_R/160222_STC_Geocentre_Midpoint_Calculator.R")
+  #dataframe <- STC_Animal_Movement_time_period_subset.df # for testing if needed
+  
+  ###############################################################################
+  ##  neccescary geocentre calculator script
+  
+  geocentrecalcPt1 <- function(long,lat) {
+    ## convert to cartesian coordinates
+    
+    long1 <- long * pi / 180
+    lat1 <- lat * pi / 180
+    
+    ## calculate curvature x,y,z values
+    
+    x1 <- cos(lat1) * cos(long1)
+    y1 <- cos(lat1) * sin(long1)
+    z1 <- sin(lat1)
+    
+    return(c(x1,y1,z1))
+  }
+  
+  ## calculating a central geo point part 2
+  
+  geocentrecalcPt2 <- function(xlist,ylist,zlist) {
+    ## calculate average of x, y and z values
+    
+    x <- mean(x.list)
+    y <- mean(y.list)
+    z <- mean(z.list)
+    
+    ## transform back to cartesian coordinates
+    
+    long <- atan2(y,x)
+    hyp <- sqrt(x * x + y * y)
+    lat <- atan2(z,hyp)
+    
+    ## calculate average long and lat
+    
+    long <- long * 180 / pi
+    lat <- lat * 180 / pi
+    
+    return(c(long,lat))
+    
+  }
+  
+  ###############################################################################
   
   ## test for correctly inputted date format
   
@@ -25,7 +67,7 @@ Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
   
   ## list unique identifiers
   
-  Identifiers <- unique(Swainsons_STC_Data_1995.df$Identifier)
+  Identifiers <- unique(dataframe$Identifier)
   
   print(paste("Identifiers List: total =",length(Identifiers)))
   print(Identifiers)
@@ -35,16 +77,19 @@ Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
   Movement_Calendar <-
     seq.Date(from = start_date,to = end_date,by = 1)
   
+  Numeric_Movement_Calendar <- as.numeric(Movement_Calendar)
+  
   print(paste("Number of days being analysed =", length(Movement_Calendar)))
   
   ## construct neccscary list objects
   
-  lon.list <- c()
+  long.list <- c()
   lat.list <- c()
   Identifier.names <- c()
   TimeDates <- c()
+  TimeDateNumeric <- c()
   
-  ## loop calculating the average lat/lon for each individual per unique date
+  ## loop calculating the average lat/long for each individual per unique date
   
   for (i in 1:length(Identifiers)) {
     ## select individual
@@ -78,10 +123,10 @@ Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
         for (k in 1:nrow(dataframe.individual.selection)) {
           CurrentRecord <- dataframe.individual.selection[k,]
           
-          lon00 <- CurrentRecord$Lon
-          lat00 <- CurrentRecord$Lat
+          long00 <- CurrentRecord$long
+          lat00 <- CurrentRecord$lat
           
-          xyzvalues <- geocentrecalcPt1(lon = lon00,lat = lat00)
+          xyzvalues <- geocentrecalcPt1(long = long00,lat = lat00)
           
           x.list <- append(x.list,xyzvalues[1])
           y.list <- append(y.list,xyzvalues[2])
@@ -89,20 +134,17 @@ Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
           
         }
         
-        
         ## run collected points through the geocentre calc pt 2
         
-        latlonvalues <- geocentrecalcPt2(x.list,y.list,z.list)
+        latlongvalues <- geocentrecalcPt2(x.list,y.list,z.list)
         
-        ## append outputted lon,lat as well as identifier and date to relevant lists
+        ## append outputted long,lat as well as identifier and date to relevant lists
         
-        lon.list <- append(lon.list,latlonvalues[1])
-        lat.list <- append(lat.list,latlonvalues[2])
+        long.list <- append(long.list,latlongvalues[1])
+        lat.list <- append(lat.list,latlongvalues[2])
         Identifier.names <- append(Identifier.names,Identifiers[i])
         TimeDates <- append(TimeDates,Movement_Calendar[j])
-        
-        
-        
+        TimeDateNumeric <- append(TimeDateNumeric,Numeric_Movement_Calendar[j])
       }
     }
     
@@ -112,12 +154,13 @@ Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
   
   Individual_mean_tracks.df <-
     data.frame(
-      lat.list,lon.list,Identifier.names,
-      TimeDates,check.names = T,check.rows = T,
+      "long" = long.list,"lat" = lat.list,Identifier.names,
+      TimeDates,TimeDateNumeric,check.names = T,check.rows = T,
       stringsAsFactors = F
     )
+  return(Individual_mean_tracks.df)
 }
 
 ## check dataframe output as neccescary
 
-head(Individual_mean_tracks.df)
+#head(Individual_mean_tracks.df)
