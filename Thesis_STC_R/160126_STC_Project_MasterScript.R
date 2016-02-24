@@ -99,6 +99,6 @@ head(Population_Averaged_Track.df)
 ### Visualiza the STC data internally for exploratorary data analysis
 
 STC_Internal_Visualization <- STC_Internal_Visualizer(STC_Animal_Movement_time_period_subset.df,STC_Title = 
-                                                        STC_Title,symbol_l.p.s = "s")
+                                                        STC_Title,symbol_l.p.s = "l")
 
 ######The function writeWebGL() is used to write the current scene to HTML:

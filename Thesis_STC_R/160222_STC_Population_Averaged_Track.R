@@ -77,7 +77,7 @@ STC_Population_Averaged_Track_Calculator <-
     Movement_Calendar <-
       seq.Date(from = start_date,to = end_date,by = 1)
     
-    #Numeric_Movement_Calendar <- as.numeric(Movement_Calendar)
+    Numeric_Movement_Calendar <- as.numeric(Movement_Calendar)
     
     print(paste("Number of days being analysed =", length(Movement_Calendar)))
     
@@ -86,8 +86,8 @@ STC_Population_Averaged_Track_Calculator <-
     pop.long.list <- c()
     pop.lat.list <- c()
     pop.Identifier <- c()
-    pop.TimeDates <- c()
-    #pop.TimeDateNumeric <- c()
+    pop.TimeDate <- c()
+    pop.TimeDateNumeric <- c()
     
     ## loop calculating the average lat/long for the population per unique date
     
@@ -137,8 +137,8 @@ STC_Population_Averaged_Track_Calculator <-
         pop.long.list <- append(pop.long.list,latlongvalues[1])
         pop.lat.list <- append(pop.lat.list,latlongvalues[2])
         pop.Identifier <- append(pop.Identifier,Identifier)
-        pop.TimeDates <- append(pop.TimeDates,Movement_Calendar[j])
-        #pop.TimeDateNumeric <- append(pop.TimeDateNumeric,Numeric_Movement_Calendar[j])
+        pop.TimeDate <- append(pop.TimeDate,Movement_Calendar[j])
+        pop.TimeDateNumeric <- append(pop.TimeDateNumeric,Numeric_Movement_Calendar[j])
       }
     }
     
@@ -146,8 +146,8 @@ STC_Population_Averaged_Track_Calculator <-
     
     Population_mean_track.df <-
       data.frame(
-        "long" = pop.long.list, "lat" = pop.lat.list,pop.Identifier,
-        pop.TimeDates,stringsAsFactors = F)
+        "long" = pop.long.list, "lat" = pop.lat.list,"Identifier" = pop.Identifier,
+        "TimeDate" = pop.TimeDate,"TimeDateNumeric" = pop.TimeDateNumeric,stringsAsFactors = F)
     
     return(Population_mean_track.df)
   }
