@@ -22,19 +22,21 @@ getwd()
 # install.packages("rgl")
 # install.packages("dismo")
 # install.packages("XML")
+#install.packages("OpenStreetMap")
 # ## Load Libraries
 
-library("SpatialEpi")
+#library("SpatialEpi")
 library("ks")
-library("zoom")
-library("geotools")
-library("rgeos")
+#library("zoom")
+#library("geotools")
+#library("rgeos")
 library("rgdal")
 library("sp")
 library("ggplot2")
 library("rgl")
-library("dismo")
-library("XML")
+#library("dismo")
+#library("XML")
+library("OpenStreetMap")
 ### Load Functions
 
 source("Thesis_STC_R/160215_STC_movebank_CSV_to_dataframe.R")
@@ -42,6 +44,7 @@ source("Thesis_STC_R/160216_STC_Time_Period_Selector.R")
 source("Thesis_STC_R/160222_STC_Geocentre_Midpoint_Calculator.R")
 source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
+source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
 source("Thesis_STC_R/160215_STC_Internal_Visualizer.R")
 
 #Source("R/")
@@ -59,7 +62,7 @@ typeof(STC_Animal_Movement.df$Identifier[1])
 ###################################################################
 ### Set parameters of interest
 
-## Time preiod of interest
+## Time period of interest
 
 t1 <- "1995-01-01"
 t2 <- "1995-12-31"
@@ -96,9 +99,30 @@ Population_Averaged_Track.df <-
 
 head(Population_Averaged_Track.df)
 
-### Visualiza the STC data internally for exploratorary data analysis
+### calculate KDE for a chosen animal dataset
 
-STC_Internal_Visualization <- STC_Internal_Visualizer(STC_Animal_Movement_time_period_subset.df,STC_Title = 
-                                                        STC_Title,symbol_l.p.s = "l")
+STC_Animal_Movement_KDE <-
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_subset.df)
+
+
+### Visualize the STC Track data internally for exploratorary data analysis
+
+STC_Internal_Track_Visualization <-
+  STC_Internal_Track_Visualizer(
+    Population_Averaged_Track.df,STC_Title =
+      STC_Title,symbol_l.p.s = "l",add = T
+  )
+
+### Visualize the STC KDE data internally for exploratorary data analysis
+
+STC_Internal_KDE_Visualization <-
+  STC_Internal_KDE_Visualizer(
+    STC_Animal_Movement_KDE,
+    colors = c("red","green"),drawpoints = T, add = F, STC_Title = STC_Title
+  )
+
 
 ######The function writeWebGL() is used to write the current scene to HTML:
+
+
+rgl.surface()
