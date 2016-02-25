@@ -22,8 +22,13 @@ getwd()
 # install.packages("rgl")
 # install.packages("dismo")
 # install.packages("XML")
-#install.packages("OpenStreetMap")
-# ## Load Libraries
+# install.packages("OpenStreetMap")
+# install.packages("rworldmap")
+# install.packages("maps")
+# install.packages("mapdata")
+# install.packages("ggmap")
+# install.packages("spatstat")
+### Load Libraries
 
 #library("SpatialEpi")
 library("ks")
@@ -37,6 +42,12 @@ library("rgl")
 #library("dismo")
 #library("XML")
 library("OpenStreetMap")
+#library("rworldmap")
+#library("maps")
+#library("mapdata")
+library("ggmap")
+library("spatstat")
+
 ### Load Functions
 
 source("Thesis_STC_R/160215_STC_movebank_CSV_to_dataframe.R")
@@ -45,7 +56,7 @@ source("Thesis_STC_R/160222_STC_Geocentre_Midpoint_Calculator.R")
 source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
-source("Thesis_STC_R/160215_STC_Internal_Visualizer.R")
+source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
 
 #Source("R/")
 
@@ -74,6 +85,10 @@ Identifier <- "SW"
 ## STC_Title
 
 STC_Title <- "Swainsons Hawk Test"
+
+boundingbox <- bounding.box.xy(x = STC_Animal_Movement.df$long,y = STC_Animal_Movement.df$lat)
+
+test <-get_map(location = boundingbox,zoom = "auto", maptype = "satellite")
 
 ###################################################################
 
@@ -121,8 +136,17 @@ STC_Internal_KDE_Visualization <-
     colors = c("red","green"),drawpoints = T, add = F, STC_Title = STC_Title
   )
 
+###################################################################
+
+
+rgl.open()    #: Opens a new device
+rgl.close()   #: Closes the current device
+rgl.clear()   #: Clears the current device
+rgl.cur()     #: Returns the active device ID
+rgl.quit()    #: Shutdowns the RGL device system
+
+###################################################################
 
 ######The function writeWebGL() is used to write the current scene to HTML:
-
 
 rgl.surface()

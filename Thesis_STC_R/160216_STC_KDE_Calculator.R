@@ -3,7 +3,7 @@
 
 ### Calculate a KDE for a specified dataset in both time and space
 
-STC_KDE_Calculator <- function(Dataset) {
+STC_KDE_Calculator <- function(dataset) {
   xyzanimal.matrix <-
     matrix(data = c(dataset$long,dataset$lat,dataset$TimeDate),ncol = 3)
   
