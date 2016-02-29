@@ -6,7 +6,7 @@
 
 
 STC_Internal_Track_Visualizer <-
-  function(dataframe,STC_Title = "STC_Visualization",symbol_l.p.s = "p", add = FALSE) {
+  function(dataframe,STC_Title = "STC_Visualization",symbol_l.p.s = "p", add = FALSE,Color = as.numeric(as.factor(dataframe$Identifier))) {
     ## visualization of tracks and coordinates using plot3D
     
     plot3d(
@@ -14,7 +14,7 @@ STC_Internal_Track_Visualizer <-
         range(dataframe$long), ylim = range(dataframe$lat),
       zlim = range(dataframe$TimeDateNumeric), ticktype =
         "detailed", xlab = "longitude", ylab = "latitude",
-      zlab = "Date",col = as.numeric(as.factor(dataframe$Identifier)), type =
+      zlab = "Date",col = Color, type =
         symbol_l.p.s, add = add, main = STC_Title
     )
   }

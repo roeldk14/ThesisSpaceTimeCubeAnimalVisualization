@@ -23,10 +23,6 @@ getwd()
 # install.packages("dismo")
 # install.packages("XML")
 # install.packages("OpenStreetMap")
-# install.packages("rworldmap")
-# install.packages("maps")
-# install.packages("mapdata")
-# install.packages("ggmap")
 # install.packages("spatstat")
 ### Load Libraries
 
@@ -42,10 +38,6 @@ library("rgl")
 #library("dismo")
 #library("XML")
 library("OpenStreetMap")
-#library("rworldmap")
-#library("maps")
-#library("mapdata")
-library("ggmap")
 library("spatstat")
 
 ### Load Functions
@@ -57,6 +49,7 @@ source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
 source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
+source("Thesis_STC_R/150224_STC_Base_Map_Addition_Script.R")
 
 #Source("R/")
 
@@ -84,11 +77,18 @@ Identifier <- "SW"
 
 ## STC_Title
 
-STC_Title <- "Swainsons Hawk Test"
+STC_Title <- "Swainsons Hawk Test Initial Visualization"
 
-boundingbox <- bounding.box.xy(x = STC_Animal_Movement.df$long,y = STC_Animal_Movement.df$lat)
+boundingbox <-
+  bounding.box.xy(x = STC_Animal_Movement.df$long,y = STC_Animal_Movement.df$lat)
 
-test <-get_map(location = boundingbox,zoom = "auto", maptype = "satellite")
+## Select Cordinate Projection
+
+Projection <- ""
+
+## Lat Long Projection
+
+Projection_LatLong <- "+proj=longlat"
 
 ###################################################################
 
@@ -133,8 +133,18 @@ STC_Internal_Track_Visualization <-
 STC_Internal_KDE_Visualization <-
   STC_Internal_KDE_Visualizer(
     STC_Animal_Movement_KDE,
-    colors = c("red","green"),drawpoints = T, add = F, STC_Title = STC_Title
+    colors = c("red","green"),drawpoints = T, add = T, STC_Title = STC_Title
   )
+
+### Generate a Basemap
+
+STC_Base_Map <- STC_Base_Map_Generator(
+  STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title,projection = Projection_LatLong
+)
+
+### Visualize the Base Map in 3d
+
+STC_3d_Base_Map <- STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 1)
 
 ###################################################################
 
@@ -148,5 +158,7 @@ rgl.quit()    #: Shutdowns the RGL device system
 ###################################################################
 
 ######The function writeWebGL() is used to write the current scene to HTML:
+
+rgl.snapshot(fmt = "png",filename = "Thesis_STC_Output/Test_Plot_Initial_Visualization")
 
 rgl.surface()
