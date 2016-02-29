@@ -99,8 +99,9 @@ STC_Population_Averaged_Track_Calculator <-
       Truecheck <-
         dataframe$TimeDate == Movement_Calendar[j]
       
-      if (length(Truecheck[Truecheck == "TRUE"]) > 0) {
-        ## select rows matching the movement calendar date of interest if present
+      if (length(Truecheck[Truecheck == "TRUE"]) > 1) {
+        ## select rows matching the movement calendar date of interest if present and
+        ## if there is more then one record
         
         dataframe.selection <-
           dataframe[dataframe$TimeDate == Movement_Calendar[j],]

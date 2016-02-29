@@ -66,7 +66,7 @@ source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
 source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
-source("Thesis_STC_R/150224_STC_Base_Map_Generator_and_Visualizer_Script.R")
+source("Thesis_STC_R/150224_STC_Base_Map_Generator_and_Visualizer_Functions.R")
 
 
 ##: Open CSV file and write to DF
@@ -92,7 +92,17 @@ head(STC_Animal_Movement.df)
 t1 <- "1995-01-01"
 t2 <- "1995-12-31"
 
-# Identifier
+##: Summer Period
+
+St1 <- "1995-05-01"
+St2 <- "1995-09-30"
+
+##: Winter Period
+
+Wt1 <- "1995-11-01"
+Wt2 <- "1996-02-29"
+
+##: Identifier
 
 Identifier <- "SW"
 
@@ -172,7 +182,7 @@ STC_Base_Map <- ##: Generate a Basemap
 ##: (retrieve and generate a basemap using the openstreetmap function)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9450)
+  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9400,alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
@@ -181,7 +191,7 @@ STC_Internal_Track_Visualization <-
   ##: Visualize the STC Track data
   STC_Internal_Track_Visualizer(
     Population_Averaged_Track.df,STC_Title =
-      STC_Title,symbol_l.p.s = "l",add = T
+      STC_Title,symbol_l.p.s = "l",add = T,Color = "red"
   )
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
@@ -190,7 +200,7 @@ STC_Internal_Track_Visualization <-
 STC_Internal_KDE_Visualization <- ##: Visualize the STC KDE data
   STC_Internal_KDE_Visualizer(
     STC_Animal_Movement_KDE,
-    colors = c("red","green"),drawpoints = T, add = T, STC_Title = STC_Title
+    colors = c("red","green"),drawpoints = F, add = T, STC_Title = STC_Title
   )
 
 ##: (add to the STC visualization scene the STC KDE data for exploratorary data analysis)
@@ -211,7 +221,7 @@ rgl.cur()     #: Returns the active device ID
 rgl.quit()    #: Shutdowns the RGL device system
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-fmt = "png",filename = "Thesis_STC_Output/Test_Plot_Base_Map_Progress.png")
+fmt = "png",filename = "Thesis_STC_Output/Test_Plot_Single_Influence_pt2.png")
 
 writeWebGL ( ##: write the current scene to HTML:
 dir = "Thesis_STC_Output/",filename = "Test_Plot_Base_Map_Progress.html",snapshot = T)
@@ -219,3 +229,5 @@ dir = "Thesis_STC_Output/",filename = "Test_Plot_Base_Map_Progress.html",snapsho
 ########################################################################################
 ########################################################################################
 ########################################################################################
+
+plotkml
