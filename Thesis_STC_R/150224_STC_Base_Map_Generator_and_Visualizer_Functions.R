@@ -1,11 +1,10 @@
-### STC_Base_Map_Addition_Script  Space_Time_Cube_Animal_Visualization
+### STC_Base_Map_Generator_and_Visualizer_Script  Space_Time_Cube_Animal_Visualization
 ### 24\02\16
 
 ### Function to retrieve a base map using the OpenStreetMap package
 
 STC_Base_Map_Generator <-
   function(dataset, Zoom = NULL, Type = "bing", MergeTiles = TRUE, Title = "Test",projection = "+proj=longlat") {
-    
     ## Retrieve Upper Left / Lower Right lat and long
     
     UpperLeft <- c(max(dataset$lat),min(dataset$long))
@@ -43,16 +42,15 @@ STC_Base_Map_Generator <-
     
   }
 
-
 ### Function to add a z value to an OSM map and visualize it
 
 ### All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman)
 
-STC_Base_Map_3d_Visualizer  <- function(map, dataset, zvalue = 0) {
+STC_Base_Map_3d_Visualizer  <- function(map, dataset, zvalue = 0, ...) {
   if (length(map$tiles) != 1) {
     stop("multiple tiles not implemented")
   }
-  if (Zvalue == 0) {
+  if (zvalue == 0) {
     zvalue <- min(dataset$TimeDateNumeric)
   }
   nx = map$tiles[[1]]$xres
