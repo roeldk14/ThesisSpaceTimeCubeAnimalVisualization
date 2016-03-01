@@ -24,7 +24,7 @@ STC_Internal_Visualization_Setup <-
 
 ## visualization of points,lines or spheres using plot3d
 
-STC_Internal_Point_Line_Sphere_Visualizer <- function(dataframe,Type = "p",color = as.numeric(as.factor(dataframe$Identifier)), add = TRUE, size = 5, radius = 0.2, ...) {
+STC_Internal_Point_Line_Sphere_Visualizer <- function(dataframe, Type = "p",color = as.numeric(as.factor(dataframe$Identifier)), add = TRUE, size = 5, radius = 0.5, ...) {
   if (Type == "p" | Type == "l" | Type == "s") {
     if (Type == "p") {
       rgl.points(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add, size = size, ...)

@@ -191,10 +191,8 @@ STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
 
-
-
-STC_Internal_pls_visualization <- 
-  STC_Internal_Point_Line_Sphere_Visualizer(STC_Animal_Movement_time_period_subset.df,Type = "p",add = TRUE,)
+STC_Internal_pls_visualization <- ##: visualize points, lines or spheres within the STC
+  STC_Internal_Point_Line_Sphere_Visualizer(STC_Animal_Movement_time_period_subset.df,Type = "l",add = TRUE,)
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
 
