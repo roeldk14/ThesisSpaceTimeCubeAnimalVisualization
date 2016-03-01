@@ -108,7 +108,9 @@ Identifier <- "SW"
 
 ##: STC_Global_Title
 
-STC_Title <- "Swainsons Hawk Test Initial Visualization"
+STC_Title <- "Swainsons Hawks"
+
+subtitle <- "Initial Test Visualization"
 
 boundingbox <-
   bounding.box.xy(x = STC_Animal_Movement.df$long,y = STC_Animal_Movement.df$lat)
@@ -169,7 +171,9 @@ STC_Animal_Movement_KDE <-
 ### Generate internal STC visualizations for exploratory data anaylsis (initial visualization
 ### consists of the STC cube and basemap, any and all other additions are the users choice
 
-##: Visualize the STC
+Animal_STC <- ##: Visualize the STC
+  STC_Internal_Visualization_Setup(dataframe = STC_Animal_Movement_time_period_subset.df,
+                                   STC_Title = STC_Title,subtitle = subtitle)
 
 ##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
 ##: being explored)
@@ -182,17 +186,15 @@ STC_Base_Map <- ##: Generate a Basemap
 ##: (retrieve and generate a basemap using the openstreetmap function)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9400,alpha = 1)
+  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9350,alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
 
-STC_Internal_Track_Visualization <-
-  ##: Visualize the STC Track data
-  STC_Internal_Track_Visualizer(
-    Population_Averaged_Track.df,STC_Title =
-      STC_Title,symbol_l.p.s = "l",add = T,Color = "red"
-  )
+
+
+STC_Internal_pls_visualization <- 
+  STC_Internal_Point_Line_Sphere_Visualizer(STC_Animal_Movement_time_period_subset.df,Type = "p",add = TRUE,)
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
 
@@ -200,7 +202,7 @@ STC_Internal_Track_Visualization <-
 STC_Internal_KDE_Visualization <- ##: Visualize the STC KDE data
   STC_Internal_KDE_Visualizer(
     STC_Animal_Movement_KDE,
-    colors = c("red","green"),drawpoints = F, add = T, STC_Title = STC_Title
+    colors = c("red","green"),drawpoints = T, add = T, STC_Title = STC_Title
   )
 
 ##: (add to the STC visualization scene the STC KDE data for exploratorary data analysis)
@@ -219,6 +221,22 @@ rgl.close()   #: Closes the current device
 rgl.clear()   #: Clears the current device
 rgl.cur()     #: Returns the active device ID
 rgl.quit()    #: Shutdowns the RGL device system
+
+
+
+STC_Point_locations <- ##: Select Points of interest
+  STC_Identify3d(STC_Animal_Movement_time_period_subset.df)
+
+##: (select points of interest from within the current visualization scene, 
+##: based on the function identidy3d. Requires the dataframe being visualized
+##: including identifiers)
+
+STC_Selected_Points.df <- ##: retireve previously selected points
+  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,STC_Point_locations) ##: retrieve points of interest 
+  
+STC_Selected_Points.df
+
+##: (retreive selected points of interest from within a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
 fmt = "png",filename = "Thesis_STC_Output/Test_Plot_Single_Influence_pt2.png")

@@ -8,21 +8,13 @@ STC_Base_Map_Generator <-
     ## Retrieve Upper Left / Lower Right lat and long
     
     UpperLeft <- c(max(dataset$lat),min(dataset$long))
-    if (UpperLeft[1] > -175 & UpperLeft[1] < 175) {
-      UpperLeft [1] <- UpperLeft[1] + 5
-    }
-    if (UpperLeft[2] > -175 & UpperLeft[2] < 175) {
-      UpperLeft [2] <- UpperLeft[2] - 5
-    }
-    
+    ifelse(UpperLeft[1] <= 80, UpperLeft [1] <- UpperLeft[1] +10,UpperLeft[1] <- 90)
+    ifelse(UpperLeft[2]  <= 170, UpperLeft[2] <- UpperLeft[2]-10, UpperLeft[2] <- 180) 
+
     LowerRight <- c(min(dataset$lat),max(dataset$long))
-    if (LowerRight[1] > -175 & LowerRight[1] < 175) {
-      LowerRight [1] <- LowerRight[1] - 5
-    }
-    if (LowerRight[2] > -175 & LowerRight[2] < 175) {
-      LowerRight [2] <- LowerRight[2] + 5
-    }
-    
+    ifelse(LowerRight[1] >= -80, LowerRight[1] <- LowerRight[1] -10, LowerRight[1] <- -90) 
+    ifelse(LowerRight[2] >= -170, LowerRight[2] <- LowerRight[2] + 10, LowerRight[2] <- -180) 
+
     print("Bounding Box + 5 Lat/Long Boundary =")
     print(paste("Upper Left Lat/Long =",UpperLeft[1],",",UpperLeft[2]))
     print(paste("Lower Right Lat/Long =",LowerRight[1],",",LowerRight[2]))
