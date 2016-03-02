@@ -64,9 +64,11 @@ source("Thesis_STC_R/160216_STC_Time_Period_Selector.R")
 source("Thesis_STC_R/160222_STC_Geocentre_Midpoint_Calculator.R")
 source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
+source("Thesis_STC_R/160302_STC_Dataframe_List_Maker_By_Individual.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
-source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
 source("Thesis_STC_R/150224_STC_Base_Map_Generator_and_Visualizer_Functions.R")
+source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
+
 
 
 ##: Open CSV file and write to DF
@@ -157,11 +159,24 @@ Population_Averaged_Track.df <-
 
 head(Population_Averaged_Track.df)
 
+
+STC_Animal_Movement_Individuals.List.df <- ##: Make a list of indivduals dataframes
+  STC_Individuals_Dataframe_List_Maker(STC_Animal_Movement_time_period_subset.df)
+
+##: (split a dataframe into smaller dataframes containing individuals dataframes contained within a list)
+
 STC_Animal_Movement_KDE <-
   ##: calculate KDE for a chosen animal dataset
   STC_KDE_Calculator(STC_Animal_Movement_time_period_subset.df)
 
 ##: (calculate the 95% and 50% kernel density estimate or home range from a given dataset)
+
+STC_Base_Map <- ##: Generate a Basemap
+  STC_Base_Map_Generator(
+    STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title,projection = Projection_LatLong
+  )
+
+##: (retrieve and generate a basemap using the openstreetmap function)
 
 ########################################################################################
 ########################################################################################
@@ -177,13 +192,6 @@ Animal_STC <- ##: Visualize the STC
 
 ##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
 ##: being explored)
-
-STC_Base_Map <- ##: Generate a Basemap
-  STC_Base_Map_Generator(
-    STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title,projection = Projection_LatLong
-  )
-
-##: (retrieve and generate a basemap using the openstreetmap function)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
   STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9350,alpha = 1)

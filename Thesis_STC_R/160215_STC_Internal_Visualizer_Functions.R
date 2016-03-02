@@ -6,6 +6,12 @@
 
 dataframe <- STC_Animal_Movement_time_period_subset.df
 
+dataframe <- Individual_Averaged_Animal_Movement_Tracks.df
+
+dataframe <- Population_Averaged_Track.df
+
+dataframe2 <- Population_Averaged_Track.df[-1,]
+
 ## STC visualization setup using plot3d
 
 STC_Internal_Visualization_Setup <-
@@ -24,19 +30,22 @@ STC_Internal_Visualization_Setup <-
 
 ## visualization of points,lines or spheres using plot3d
 
-STC_Internal_Point_Line_Sphere_Visualizer <- function(dataframe, Type = "p",color = as.numeric(as.factor(dataframe$Identifier)), add = TRUE, size = 5, radius = 0.5, ...) {
-  if (Type == "p" | Type == "l" | Type == "s") {
+STC_Internal_Point_Line_Sphere_Visualizer <- function(dataframe, Type = "p",color = as.numeric(as.factor(dataframe$Identifier)), add = TRUE, size = 5, radius = 2, ...) {
+  if (Type == "p" | Type == "l" | Type == "s" | Type == "sp") {
     if (Type == "p") {
-      rgl.points(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add, size = size, ...)
+      points3d(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add, size = size, ...)
     }
     if (Type == "l") {
-      rgl.lines(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add, ...)
+      lines3d(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add, ...)
     }
     if (Type == "s") {
-      rgl.spheres(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add,radius = radius, ...)
+      spheres3d(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add,radius = radius, ...)
+    }
+    if (Type == "sp") {
+      sprites3d(x = dataframe$long, y = dataframe$lat, z = dataframe$TimeDateNumeric, color = color,add = add, ...)
     }
   }
-  warning("Type must equal 'p' for point or 'l' for line or 's' for sphere")
+  warning("Type must equal 'p' for point or 'l' for line or 's' for sphere or 'sp' for sprite")
 }
 
 
