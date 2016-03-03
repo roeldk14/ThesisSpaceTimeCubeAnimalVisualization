@@ -40,6 +40,7 @@ getwd()
 # install.packages("XML")
 # install.packages("OpenStreetMap")
 # install.packages("spatstat")
+# install.packages("PBSmapping")
 
 ##: Load Libraries
 
@@ -56,6 +57,7 @@ library("rgl")
 #library("XML")
 library("OpenStreetMap")
 library("spatstat")
+library("PBSmapping")
 
 ##: Load Functions
 
@@ -66,6 +68,7 @@ source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
 source("Thesis_STC_R/160302_STC_Dataframe_List_Maker_By_Individual.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
+source("Thesis_STC_R/160303_STC_Reproject_LatLong_to_UTM_Functions_Script.R")
 source("Thesis_STC_R/150224_STC_Base_Map_Generator_and_Visualizer_Functions.R")
 source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
 
@@ -119,6 +122,8 @@ boundingbox <-
 
 ##: Set Lat Long Projection
 
+EPSG <-make_EPSG()
+
 Projection_LatLong <- "+proj=longlat"
 
 ##: Select Cordinate Projection
@@ -171,6 +176,11 @@ STC_Animal_Movement_KDE <-
 
 ##: (calculate the 95% and 50% kernel density estimate or home range from a given dataset)
 
+Individual_Averaged_Animal_Movement_Tracks_UTM.df <- ##: add UTM zones to the dataframe
+  STC_UTM_Zone_Calculator(Individual_Averaged_Animal_Movement_Tracks.df)
+
+##: Calculate the UTM Zones for a dataframe based on their long value
+
 STC_Base_Map <- ##: Generate a Basemap
   STC_Base_Map_Generator(
     STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title,projection = Projection_LatLong
@@ -194,13 +204,13 @@ Animal_STC <- ##: Visualize the STC
 ##: being explored)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9350,alpha = 1)
+  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9400,alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
 
 STC_Internal_pls_visualization <- ##: visualize points, lines or spheres within the STC
-  STC_Internal_Point_Line_Sphere_Visualizer(STC_Animal_Movement_time_period_subset.df,Type = "l",add = TRUE,)
+  STC_Internal_Point_Line_Sphere_Visualizer(Population_Averaged_Track.df,Type = "l",add = TRUE,color = "red")
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
 
@@ -208,7 +218,7 @@ STC_Internal_pls_visualization <- ##: visualize points, lines or spheres within 
 STC_Internal_KDE_Visualization <- ##: Visualize the STC KDE data
   STC_Internal_KDE_Visualizer(
     STC_Animal_Movement_KDE,
-    colors = c("red","green"),drawpoints = T, add = T, STC_Title = STC_Title
+    colors = c("red","green"),drawpoints = T, add = T
   )
 
 ##: (add to the STC visualization scene the STC KDE data for exploratorary data analysis)

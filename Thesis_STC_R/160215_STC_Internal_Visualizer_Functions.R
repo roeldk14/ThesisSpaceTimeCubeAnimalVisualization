@@ -4,14 +4,6 @@
 ### STC Visulization Functions from the RGL package and others specifically for internal analysis
 ### on the R platform
 
-dataframe <- STC_Animal_Movement_time_period_subset.df
-
-dataframe <- Individual_Averaged_Animal_Movement_Tracks.df
-
-dataframe <- Population_Averaged_Track.df
-
-dataframe2 <- Population_Averaged_Track.df[-1,]
-
 ## STC visualization setup using plot3d
 
 STC_Internal_Visualization_Setup <-
@@ -48,15 +40,13 @@ STC_Internal_Point_Line_Sphere_Visualizer <- function(dataframe, Type = "p",colo
   warning("Type must equal 'p' for point or 'l' for line or 's' for sphere or 'sp' for sprite")
 }
 
-
-
 ## visualization of KDE home ranges using plot3d
 
 STC_Internal_KDE_Visualizer <-
-  function(dataset.kde, colors = c("gray","blue"),drawpoints = FALSE, add = TRUE) {
+  function(dataset.kde, colors = c("gray","blue"),drawpoints = FALSE, add = TRUE, ...) {
     plot(
       dataset.kde,cont = c(50,95),colors = colors, drawpoints = drawpoints, xlab = "long", ylab = "lat",
-      zlab = "time", size = 2, ptcol = "white", add = add, drawpoints = drawpoints
+      zlab = "time", size = 2, ptcol = "white", add = add, ...
     )
   }
 
