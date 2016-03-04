@@ -79,7 +79,7 @@ source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
 ##: (Open a chosen CSV file and write it to dataframe format (preferably from MoveBank.org))
 
 STC_Animal_Movement.df <-
-  STC_Movebank_CSVtoDF("Thesis_STC_Data/Swainson's Hawks.csv")
+  STC_Movebank_CSVtoDF("Thesis_STC_Data/Kruger African Buffalo, GPS tracking, South Africa.csv")
 
 ##: Investigate data
 
@@ -94,8 +94,8 @@ head(STC_Animal_Movement.df)
 
 ##: Time period of interest
 
-t1 <- "1995-01-01"
-t2 <- "1995-12-31"
+t1 <- "2005-01-01"
+t2 <- "2006-12-31"
 
 ##: Summer Period
 
@@ -109,11 +109,11 @@ Wt2 <- "1996-02-29"
 
 ##: Identifier
 
-Identifier <- "SW"
+Identifier <- "AB"
 
 ##: STC_Global_Title
 
-STC_Title <- "Swainsons Hawks"
+STC_Title <- "African Buffalo"
 
 subtitle <- "Initial Test Visualization"
 
@@ -122,10 +122,9 @@ boundingbox <-
 
 ##: Set Lat Long Projection
 
-EPSG <-make_EPSG()
+EPSG <- make_EPSG()
 
 Projection_LatLong <- "+proj=longlat"
-Projection_LatLongv2 <- "+proj=longlat +ellps=WGS84"
 
 ##: Select Cordinate Projection
 
@@ -166,28 +165,37 @@ Population_Averaged_Track.df <-
 head(Population_Averaged_Track.df)
 
 
-STC_Animal_Movement_Individuals.List.df <- ##: Make a list of indivduals dataframes
+STC_Animal_Movement_Individuals.List.df <-
+  ##: Make a list of indivduals dataframes
   STC_Individuals_Dataframe_List_Maker(STC_Animal_Movement_time_period_subset.df)
 
 ##: (split a dataframe into smaller dataframes containing individuals dataframes contained within a list)
 
 STC_Animal_Movement_KDE <-
   ##: calculate KDE for a chosen animal dataset
-  STC_KDE_Calculator(STC_Animal_Movement_time_period_subset.df)
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_subset.df,proj = "LL")
 
 ##: (calculate the 95% and 50% kernel density estimate or home range from a given dataset)
 
-Population_Averaged_Track.df <- ##: add UTM zones and values to a lat long dataframe
+Population_Averaged_Track.df <-
+  ##: add UTM zones and values to a lat long dataframe
   STC_UTM_Calculator(Population_Averaged_Track.df)
 
-Individual_Averaged_Animal_Movement_Tracks.df <- ##: add UTM zones and values to a lat long dataframe
+Individual_Averaged_Animal_Movement_Tracks.df <-
+  ##: add UTM zones and values to a lat long dataframe
   STC_UTM_Calculator(Individual_Averaged_Animal_Movement_Tracks.df)
+
+STC_Animal_Movement_time_period_subset.df <-
+  ##: add UTM zones and values to a lat long dataframe
+  STC_UTM_Calculator(STC_Animal_Movement_time_period_subset.df)
+
+
 
 ##: Calculate the UTM Zones and Easting and Northing for a dataframe based on their long lat values
 
 STC_Base_Map <- ##: Generate a Basemap
   STC_Base_Map_Generator(
-    STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title,projection = Projection_LatLong
+    STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title, proj = "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
   )
 
 ##: (retrieve and generate a basemap using the openstreetmap function)
@@ -201,20 +209,27 @@ STC_Base_Map <- ##: Generate a Basemap
 ### consists of the STC cube and basemap, any and all other additions are the users choice
 
 Animal_STC <- ##: Visualize the STC
-  STC_Internal_Visualization_Setup(dataframe = STC_Animal_Movement_time_period_subset.df,
-                                   STC_Title = STC_Title,subtitle = subtitle)
+  STC_Internal_Visualization_Setup(
+    dataframe = STC_Animal_Movement_time_period_subset.df,
+    STC_Title = STC_Title,subtitle = subtitle,proj = "UTM"
+  )
 
 ##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
 ##: being explored)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9400,alpha = 1)
+  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9450,alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
 
-STC_Internal_pls_visualization <- ##: visualize points, lines or spheres within the STC
-  STC_Internal_Point_Line_Sphere_Visualizer(Population_Averaged_Track.df,Type = "l",add = TRUE,color = "red")
+STC_Internal_pls_visualization <-
+  ##: visualize points, lines or spheres within the STC
+  STC_Internal_Point_Line_Sphere_Visualizer(
+    STC_Animal_Movement_Individuals.List.df$SW1,x = STC_Animal_Movement_Individuals.List.df$SW1$UTM.East,
+    y = STC_Animal_Movement_Individuals.List.df$SW1$UTM.North,z = STC_Animal_Movement_Individuals.List.df$SW1$TimeDateNumeric,
+    Type = "l",add = TRUE,color = "blue"
+  )
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
 
@@ -247,22 +262,22 @@ rgl.quit()    #: Shutdowns the RGL device system
 STC_Point_locations <- ##: Select Points of interest
   STC_Identify3d(STC_Animal_Movement_time_period_subset.df)
 
-##: (select points of interest from within the current visualization scene, 
+##: (select points of interest from within the current visualization scene,
 ##: based on the function identidy3d. Requires the dataframe being visualized
 ##: including identifiers)
 
 STC_Selected_Points.df <- ##: retireve previously selected points
-  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,STC_Point_locations) ##: retrieve points of interest 
-  
+  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,STC_Point_locations) ##: retrieve points of interest
+
 STC_Selected_Points.df
 
 ##: (retreive selected points of interest from within a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-fmt = "png",filename = "Thesis_STC_Output/Test_Plot_Single_Influence_pt2.png")
+  fmt = "png",filename = "Thesis_STC_Output/Test_Plot_UTM_Influence_OriginalpointsandKDE.png")
 
-writeWebGL ( ##: write the current scene to HTML:
-dir = "Thesis_STC_Output/",filename = "Test_Plot_Base_Map_Progress.html",snapshot = T)
+writeWebGL (##: write the current scene to HTML:
+  dir = "Thesis_STC_Output/",filename = "Test_Plot_Base_Map_Progress.html",snapshot = T)
 
 ########################################################################################
 ########################################################################################

@@ -11,6 +11,8 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   Animal_dataset <-
     read.csv(file = CSV_File_Pathway,stringsAsFactors = F)
   
+  head(Animal_dataset)
+  unique(Animal_dataset$individual.local.identifier)
   ## retrieve data columns of interest
   
   Lon <- Animal_dataset$location.long
@@ -18,19 +20,23 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   TimeDate <- as.Date(Animal_dataset$timestamp)
   TimeDateNumeric <- as.numeric(TimeDate)
   Identifier <- Animal_dataset$individual.local.identifier
+  if ( is.null(Animal_dataset$utm.easting) == TRUE ) {
+    Animal_dataset$utm.easting <- NA
+    warning("no UTM easting")
+  }
   UTM.East <- Animal_dataset$utm.easting
+  if ( is.null(Animal_dataset$utm.northing) == TRUE ) {
+    Animal_dataset$utm.northing <- NA
+    warning("no UTM northing")
+  }
   UTM.North <- Animal_dataset$utm.northing
-  TimezoneLocal <- Animal_dataset$study.timezone
-  TimeDateLocal <- as.Date(Animal_dataset$study.local.timestamp)
-  TimeDateLocalNumeric <- as.numeric(TimeDateLocal)
   
   ## recreate dataframe with relevant columns
   
   STC_animal_data.df <-
     data.frame(
       "long" = Lon, "lat" = Lat, "TimeDate" = TimeDate, "TimeDateNumeric" = TimeDateNumeric,
-      "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,
-      "TimezoneLocal" = TimezoneLocal, "TimeDateLocal" = TimeDateLocal, "TimeDateLocalNumeric" = TimeDateLocalNumeric,stringsAsFactors = F
+      "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,stringsAsFactors = F
     )
   
 }

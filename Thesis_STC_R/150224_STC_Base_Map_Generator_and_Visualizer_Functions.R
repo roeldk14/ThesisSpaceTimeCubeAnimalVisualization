@@ -4,7 +4,7 @@
 ### Function to retrieve a base map using the OpenStreetMap package
 
 STC_Base_Map_Generator <-
-  function(dataset, Zoom = NULL, Type = "bing", MergeTiles = TRUE, Title = "Test",projection = "+proj=longlat") {
+  function(dataset, Zoom = NULL, Type = "bing", MergeTiles = TRUE, Title = "Test",proj = NULL) {
     ## Retrieve Upper Left / Lower Right lat and long
     
     UpperLeft <- c(max(dataset$lat),min(dataset$long))
@@ -26,7 +26,10 @@ STC_Base_Map_Generator <-
         upperLeft = UpperLeft,lowerRight = LowerRight,zoom = Zoom,type = Type, mergeTiles = MergeTiles
       )
     
-    datamap <- openproj(datamap, projection = "+proj=longlat")
+    if ( is.null(proj) == FALSE ) {
+      datamap <- openproj(datamap, projection = "+proj=longlat")
+      warning("proj must equal a true projection")
+    }
     
     plot(datamap,raster = T,main = paste(Title, "test visualization"))
     
