@@ -124,6 +124,10 @@ boundingbox <-
 
 EPSG <- make_EPSG()
 
+##: search for projection
+
+CRS("+proj=utm +zone=36")
+
 Projection_LatLong <- "+proj=longlat"
 
 ##: Select Cordinate Projection
@@ -167,7 +171,7 @@ head(Population_Averaged_Track.df)
 
 STC_Animal_Movement_Individuals.List.df <-
   ##: Make a list of indivduals dataframes
-  STC_Individuals_Dataframe_List_Maker(STC_Animal_Movement_time_period_subset.df)
+  STC_Individuals_Dataframe_List_Maker(Individual_Averaged_Animal_Movement_Tracks.df)
 
 ##: (split a dataframe into smaller dataframes containing individuals dataframes contained within a list)
 
@@ -189,13 +193,11 @@ STC_Animal_Movement_time_period_subset.df <-
   ##: add UTM zones and values to a lat long dataframe
   STC_UTM_Calculator(STC_Animal_Movement_time_period_subset.df)
 
-
-
 ##: Calculate the UTM Zones and Easting and Northing for a dataframe based on their long lat values
 
 STC_Base_Map <- ##: Generate a Basemap
   STC_Base_Map_Generator(
-    STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title, proj = "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+    STC_Animal_Movement.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title, proj = Projection_LatLong
   )
 
 ##: (retrieve and generate a basemap using the openstreetmap function)
@@ -211,14 +213,14 @@ STC_Base_Map <- ##: Generate a Basemap
 Animal_STC <- ##: Visualize the STC
   STC_Internal_Visualization_Setup(
     dataframe = STC_Animal_Movement_time_period_subset.df,
-    STC_Title = STC_Title,subtitle = subtitle,proj = "UTM"
+    STC_Title = STC_Title,subtitle = subtitle,proj = "LL"
   )
 
 ##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
 ##: being explored)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9450,alpha = 1)
+  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 12800,alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
@@ -226,9 +228,9 @@ STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
 STC_Internal_pls_visualization <-
   ##: visualize points, lines or spheres within the STC
   STC_Internal_Point_Line_Sphere_Visualizer(
-    STC_Animal_Movement_Individuals.List.df$SW1,x = STC_Animal_Movement_Individuals.List.df$SW1$UTM.East,
-    y = STC_Animal_Movement_Individuals.List.df$SW1$UTM.North,z = STC_Animal_Movement_Individuals.List.df$SW1$TimeDateNumeric,
-    Type = "l",add = TRUE,color = "blue"
+    Individual_Averaged_Animal_Movement_Tracks.df,x = Individual_Averaged_Animal_Movement_Tracks.df$long,
+    y = Individual_Averaged_Animal_Movement_Tracks.df$lat,z = Individual_Averaged_Animal_Movement_Tracks.df$TimeDateNumeric,
+    Type = "l",add = TRUE
   )
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
@@ -274,7 +276,7 @@ STC_Selected_Points.df
 ##: (retreive selected points of interest from within a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-  fmt = "png",filename = "Thesis_STC_Output/Test_Plot_UTM_Influence_OriginalpointsandKDE.png")
+  fmt = "png",filename = "Thesis_STC_Output/Test_Plot_LL_buffalo_KDE.png")
 
 writeWebGL (##: write the current scene to HTML:
   dir = "Thesis_STC_Output/",filename = "Test_Plot_Base_Map_Progress.html",snapshot = T)

@@ -10,7 +10,7 @@ STC_KDE_Calculator <- function(dataframe,proj = "LL") {
   }
   if (proj == "UTM") {
     xyzanimal.matrix <-
-      matrix(data = c(dataframe$UTM.East,dataframe$UTM.North,dataframe$TimeDate),ncol = 3)
+      matrix(data = c(as.numeric(dataframe$UTM.East),as.numeric(dataframe$UTM.North),as.numeric(dataframe$TimeDate)),ncol = 3)
   }
   warning("proj must equal either 'LL' for Lat/Long or 'UTM' for Universal Transverse Mercator")
   H.pi <- Hpi(xyzanimal.matrix,binned = TRUE)
