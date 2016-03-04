@@ -125,6 +125,7 @@ boundingbox <-
 EPSG <-make_EPSG()
 
 Projection_LatLong <- "+proj=longlat"
+Projection_LatLongv2 <- "+proj=longlat +ellps=WGS84"
 
 ##: Select Cordinate Projection
 
@@ -176,10 +177,13 @@ STC_Animal_Movement_KDE <-
 
 ##: (calculate the 95% and 50% kernel density estimate or home range from a given dataset)
 
-Individual_Averaged_Animal_Movement_Tracks_UTM.df <- ##: add UTM zones to the dataframe
-  STC_UTM_Zone_Calculator(Individual_Averaged_Animal_Movement_Tracks.df)
+Population_Averaged_Track.df <- ##: add UTM zones and values to a lat long dataframe
+  STC_UTM_Calculator(Population_Averaged_Track.df)
 
-##: Calculate the UTM Zones for a dataframe based on their long value
+Individual_Averaged_Animal_Movement_Tracks.df <- ##: add UTM zones and values to a lat long dataframe
+  STC_UTM_Calculator(Individual_Averaged_Animal_Movement_Tracks.df)
+
+##: Calculate the UTM Zones and Easting and Northing for a dataframe based on their long lat values
 
 STC_Base_Map <- ##: Generate a Basemap
   STC_Base_Map_Generator(
