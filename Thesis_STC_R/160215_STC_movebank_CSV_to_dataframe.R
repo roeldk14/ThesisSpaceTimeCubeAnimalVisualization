@@ -9,10 +9,8 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   ## open CSV file
   
   Animal_dataset <-
-    read.csv(file = CSV_File_Pathway,stringsAsFactors = F)
+    read.csv(file = CSV_File_Pathway,stringsAsFactors = F,skipNul = TRUE)
   
-  head(Animal_dataset)
-  unique(Animal_dataset$individual.local.identifier)
   ## retrieve data columns of interest
   
   Lon <- Animal_dataset$location.long
@@ -39,6 +37,7 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
       "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,stringsAsFactors = F
     )
   
+  STC_animal_data.df <- na.omit(STC_animal_data.df)
 }
 ## check data columns and new data frame
 # typeof(Identifier[1])

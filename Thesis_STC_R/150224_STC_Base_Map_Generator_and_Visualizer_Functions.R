@@ -4,16 +4,16 @@
 ### Function to retrieve a base map using the OpenStreetMap package
 
 STC_Base_Map_Generator <-
-  function(dataset, Zoom = NULL, Type = "bing", MergeTiles = TRUE, Title = "Test",proj = NULL) {
+  function(dataframe, Zoom = NULL, Type = "bing", MergeTiles = TRUE, Title = "Test",proj = NULL) {
     ## Retrieve Upper Left / Lower Right lat and long
     
-    UpperLeft <- c(max(dataset$lat),min(dataset$long))
-#     ifelse(UpperLeft[1] <= 80, UpperLeft [1] <- UpperLeft[1] +1,UpperLeft[1] <- 90)
-#     ifelse(UpperLeft[2]  <= 170, UpperLeft[2] <- UpperLeft[2]-1, UpperLeft[2] <- 180) 
+    UpperLeft <- c(max(dataframe$lat),min(dataframe$long))
+     ifelse(UpperLeft[1] <= 80, UpperLeft [1] <- UpperLeft[1] +1,UpperLeft[1] <- 90)
+     ifelse(UpperLeft[2]  <= 170, UpperLeft[2] <- UpperLeft[2]-1, UpperLeft[2] <- 180) 
 
-    LowerRight <- c(min(dataset$lat),max(dataset$long))
-#     ifelse(LowerRight[1] >= -80, LowerRight[1] <- LowerRight[1] -1, LowerRight[1] <- -90) 
-#     ifelse(LowerRight[2] >= -170, LowerRight[2] <- LowerRight[2] + 1, LowerRight[2] <- -180) 
+    LowerRight <- c(min(dataframe$lat),max(dataframe$long))
+     ifelse(LowerRight[1] >= -80, LowerRight[1] <- LowerRight[1] -1, LowerRight[1] <- -90) 
+     ifelse(LowerRight[2] >= -170, LowerRight[2] <- LowerRight[2] + 1, LowerRight[2] <- -180) 
 
     print("Bounding Box + 10 Lat/Long Boundary =")
     print(paste("Upper Left Lat/Long =",UpperLeft[1],",",UpperLeft[2]))
