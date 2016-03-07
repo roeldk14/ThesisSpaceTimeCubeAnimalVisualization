@@ -41,6 +41,7 @@ getwd()
 # install.packages("OpenStreetMap")
 # install.packages("spatstat")
 # install.packages("PBSmapping")
+#install.packages("fields")
 
 ##: Load Libraries
 
@@ -58,6 +59,7 @@ library("rgl")
 library("OpenStreetMap")
 library("spatstat")
 library("PBSmapping")
+library("fields")
 
 ##: Load Functions
 
@@ -79,7 +81,7 @@ source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
 ##: (Open a chosen CSV file and write it to dataframe format (preferably from MoveBank.org))
 
 STC_Animal_Movement.df <-
-  STC_Movebank_CSVtoDF("Thesis_STC_Data/Pet Cats.csv")
+  STC_Movebank_CSVtoDF("Thesis_STC_Data/Swainson's Hawks.csv")
 
 ##: Investigate data
 
@@ -96,8 +98,8 @@ unique(STC_Animal_Movement.df$Identifier)
 
 ##: Time period of interest
 
-t1 <- "2013-07-09"
-t2 <- "2015-04-14"
+t1 <- "1995-08-18"
+t2 <- "1996-03-19"
 
 ##: Summer Period
 
@@ -111,11 +113,11 @@ Wt2 <- "1996-02-29"
 
 ##: Identifier
 
-Identifier <- "Cats"
+Identifier <- "SW"
 
 ##: STC_Global_Title
 
-STC_Title <- "Cats Cats Cats"
+STC_Title <- "Swainsons Hawk"
 
 subtitle <- "Initial Test Visualization"
 
@@ -199,7 +201,7 @@ STC_Animal_Movement_time_period_subset.df <-
 
 STC_Base_Map <- ##: Generate a Basemap
   STC_Base_Map_Generator(
-    STC_Animal_Movement_Individuals.List.df$Chicha, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title, proj = Projection_LatLong
+    STC_Animal_Movement_time_period_subset.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title, proj = Projection_LatLong
   )
 
 ##: (retrieve and generate a basemap using the openstreetmap function)
@@ -214,7 +216,7 @@ STC_Base_Map <- ##: Generate a Basemap
 
 Animal_STC <- ##: Visualize the STC
   STC_Internal_Visualization_Setup(
-    dataframe = STC_Animal_Movement_Individuals.List.df$Chicha,
+    dataframe = STC_Animal_Movement_time_period_subset.df,
     STC_Title = STC_Title,subtitle = subtitle,proj = "LL"
   )
 
@@ -222,7 +224,7 @@ Animal_STC <- ##: Visualize the STC
 ##: being explored)
 
 STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 15895,alpha = 1)
+  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9350,alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
@@ -230,9 +232,9 @@ STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
 STC_Internal_pls_visualization <-
   ##: visualize points, lines or spheres within the STC
   STC_Internal_Point_Line_Sphere_Visualizer(
-    STC_Animal_Movement_Individuals.List.df$Chicha,x = STC_Animal_Movement_Individuals.List.df$Chicha$long,
-    y = STC_Animal_Movement_Individuals.List.df$Chicha$lat,z = STC_Animal_Movement_Individuals.List.df$Chicha$TimeDateNumeric,
-    Type = "l",add = TRUE
+    Population_Averaged_Track.df,x = Population_Averaged_Track.df$long,
+    y = Population_Averaged_Track.df$lat,z = Population_Averaged_Track.df$TimeDateNumeric,
+    Type = "l",add = TRUE,color = "red"
   )
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
