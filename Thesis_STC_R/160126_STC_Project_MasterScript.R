@@ -71,10 +71,9 @@ source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
 source("Thesis_STC_R/160302_STC_Dataframe_List_Maker_By_Individual.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
 source("Thesis_STC_R/160303_STC_Reproject_LatLong_to_UTM_Functions_Script.R")
+source("Thesis_STC_R/160222_STC_Geocentre&Distance&Interaction_Calculator.R")
 source("Thesis_STC_R/150224_STC_Base_Map_Generator_and_Visualizer_Functions.R")
 source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
-
-
 
 ##: Open CSV file and write to DF
 
@@ -206,6 +205,20 @@ STC_Base_Map <- ##: Generate a Basemap
 
 ##: (retrieve and generate a basemap using the openstreetmap function)
 
+
+STC_Outliers <-  ##:Retrieve outliers from the dataset based on the geo distance between points 
+  Distance_Outlier_Calculator(total_dataframe = STC_Animal_Movement_time_period_subset.df,
+                              pop_dataframe = Population_Averaged_Track.df,t1 = t1,t2 = t2,outlier_buffer_in_km = 1000)
+
+##: (Retrieve outliers from the dataset based on the geo distance between points with the same time stamp)
+
+STC_Interactions <-  ##:Retrieve possible interactions between individuals from the dataset based on the geo distance between points 
+  Distance_Interaction_Calculator(total_dataframe = STC_Animal_Movement_time_period_subset.df,
+                                  t1 = t1,t2 = t2,interaction_radius_in_km = 10)
+
+##: (Retrieve possible interactions between individuals from the dataset based on the geo distance between points with the same time stamp)
+
+
 ########################################################################################
 ########################################################################################
 ########################################################################################
@@ -232,9 +245,9 @@ STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
 STC_Internal_pls_visualization <-
   ##: visualize points, lines or spheres within the STC
   STC_Internal_Point_Line_Sphere_Visualizer(
-    Population_Averaged_Track.df,x = Population_Averaged_Track.df$long,
-    y = Population_Averaged_Track.df$lat,z = Population_Averaged_Track.df$TimeDateNumeric,
-    Type = "l",add = TRUE,color = "red"
+    STC_Outliers,x = STC_Outliers$long,
+    y = STC_Outliers$lat,z = STC_Outliers$TimeDateNumeric,
+    Type = "s",add = TRUE,color = "yellow"
   )
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
