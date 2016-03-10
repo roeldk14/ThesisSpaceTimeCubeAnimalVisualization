@@ -112,7 +112,7 @@ Distance_Outlier_Calculator <-
             total_dataframe[total_dataframe$TimeDate == Movement_Calendar[i],]
           
           
-          for (j in 1:length(total_dataframe_time_selection)) {
+          for (j in 1:length(total_dataframe_time_selection$long)) {
             total_dataframe_time_selection_single <-
               total_dataframe_time_selection[j,]
             
@@ -231,37 +231,40 @@ Distance_Interaction_Calculator <-
           total_dataframe_beta[total_dataframe_beta$TimeDate == Movement_Calendar[i],]
         
         
-        for (j in 1:length(total_dataframe_alpha_time_selection)) {
+        for (j in 1:length(total_dataframe_alpha_time_selection$long)) {
           total_dataframe_alpha_time_selection_single <-
             total_dataframe_alpha_time_selection[j,]
           
-          for (k in 1:length(total_dataframe_beta_time_selection)) {
+          for (k in 1:length(total_dataframe_beta_time_selection$long)) {
             
-            long1 = total_dataframe_alpha_time_selection$long
-            lat1 = total_dataframe_alpha_time_selection$lat
-            long2 = total_dataframe_beta_time_selection$long
-            lat2 = total_dataframe_beta_time_selection$lat
-            
-            distance <-
-              rdist.earth(matrix(c(long1,lat1), ncol = 2),matrix(c(long2,lat2), ncol =
-                                                                   2),miles = FALSE, R = 6371)
-            
-            long.list <- append(long.list,long2)
-            lat.list <-  append(lat.list,lat2)
-            Distance_list <- append(Distance_list,distance)
-            Identifier.names <-
-              append(Identifier.names,total_dataframe_beta_time_selection$Identifier)
-            TimeDate <-
-              append(TimeDate,total_dataframe_beta_time_selection$TimeDate)
-            TimeDateNumeric <-
-              append(TimeDateNumeric,total_dataframe_beta_time_selection$TimeDateNumeric)
-            UTM.East.list <-
-              append(UTM.East.list,total_dataframe_beta_time_selection$UTM.East[[1]])
-            UTM.North.list <-
-              append(UTM.North.list,total_dataframe_beta_time_selection$UTM.North[[1]])
-            utmzone <-
-              append(utmzone,total_dataframe_beta_time_selection$utmzone)
-            
+            if (total_dataframe_alpha_time_selection_single$Identifier != total_dataframe_beta_time_selection$Identifier[k]) {
+              
+              long1 = total_dataframe_alpha_time_selection_single$long
+              lat1 = total_dataframe_alpha_time_selection_single$lat
+              long2 = total_dataframe_beta_time_selection$long[k]
+              lat2 = total_dataframe_beta_time_selection$lat[k]
+              
+              distance <-
+                rdist.earth(matrix(c(long1,lat1), ncol = 2),matrix(c(long2,lat2), ncol =
+                                                                     2),miles = FALSE, R = 6371)
+              
+              long.list <- append(long.list,long2)
+              lat.list <-  append(lat.list,lat2)
+              Distance_list <- append(Distance_list,distance)
+              Identifier.names <-
+                append(Identifier.names,total_dataframe_beta_time_selection$Identifier[k])
+              TimeDate <-
+                append(TimeDate,total_dataframe_beta_time_selection$TimeDate[k])
+              TimeDateNumeric <-
+                append(TimeDateNumeric,total_dataframe_beta_time_selection$TimeDateNumeric[k])
+              UTM.East.list <-
+                append(UTM.East.list,total_dataframe_beta_time_selection$UTM.East[[k]])
+              UTM.North.list <-
+                append(UTM.North.list,total_dataframe_beta_time_selection$UTM.North[[k]])
+              utmzone <-
+                append(utmzone,total_dataframe_beta_time_selection$utmzone[k])
+              
+            }
           }
         }
       }
@@ -281,8 +284,8 @@ Distance_Interaction_Calculator <-
         utmzone, "Distance" = Distance_list, check.names = T,check.rows = T,
         stringsAsFactors = F
       )
-    
-    output.df <- output.df[output.df$Distance < interaction_radius_in_km & output.df$Distance > 0,]
-    
+
+    output.df <- output.df[output.df$Distance < interaction_radius_in_km,]
+
     return(output.df)
   }

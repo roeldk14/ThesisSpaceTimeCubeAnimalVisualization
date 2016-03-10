@@ -121,7 +121,7 @@ STC_Title <- "Swainsons Hawk"
 subtitle <- "Initial Test Visualization"
 
 boundingbox <-
-  bounding.box.xy(x = STC_Animal_Movement.df$long,y = STC_Animal_Movement.df$lat)
+  bounding.box.xy(x = STC_Animal_Movement.df$long, y = STC_Animal_Movement.df$lat)
 
 ##: Set Lat Long Projection
 
@@ -146,7 +146,7 @@ Projection <- ""
 
 STC_Animal_Movement_time_period_subset.df <-
   ##: Subset time period of interest
-  STC_time_period_selector(STC_Animal_Movement.df,t1,t2)
+  STC_time_period_selector(STC_Animal_Movement.df, t1, t2)
 
 ##: (subset from a given dataset the time period of interest)
 
@@ -154,7 +154,7 @@ head(STC_Animal_Movement_time_period_subset.df)
 
 Individual_Averaged_Animal_Movement_Tracks.df <-
   ##: Calculate individual averaged tracks for a chosen dataset
-  STC_Individual_Averaged_Tracks_Calculator(STC_Animal_Movement_time_period_subset.df,t1,t2)
+  STC_Individual_Averaged_Tracks_Calculator(STC_Animal_Movement_time_period_subset.df, t1, t2)
 
 ##: (an average geographic coordinate is calcualted for each individual
 ##: on each day from all locations recorded on that day)
@@ -163,7 +163,10 @@ head(Individual_Averaged_Animal_Movement_Tracks.df)
 
 Population_Averaged_Track.df <-
   ##: Calculate Population Averaged Track for a chosen animal dataset
-  STC_Population_Averaged_Track_Calculator(Individual_Averaged_Animal_Movement_Tracks.df,t1,t2,Identifier)
+  STC_Population_Averaged_Track_Calculator(Individual_Averaged_Animal_Movement_Tracks.df,
+                                           t1,
+                                           t2,
+                                           Identifier)
 
 ##: (an average geographic coordinate is calcualted for each day from all locations recorded
 ##: on that day as long as n locations exceeds one, note: generally uses the individual tracks
@@ -180,7 +183,7 @@ STC_Animal_Movement_Individuals.List.df <-
 
 STC_Animal_Movement_KDE <-
   ##: calculate KDE for a chosen animal dataset
-  STC_KDE_Calculator(STC_Animal_Movement_time_period_subset.df,proj = "LL")
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_subset.df, proj = "LL")
 
 ##: (calculate the 95% and 50% kernel density estimate or home range from a given dataset)
 
@@ -200,21 +203,37 @@ STC_Animal_Movement_time_period_subset.df <-
 
 STC_Base_Map <- ##: Generate a Basemap
   STC_Base_Map_Generator(
-    STC_Animal_Movement_time_period_subset.df, Zoom = NULL, Type = "bing",MergeTiles = TRUE,Title = STC_Title, proj = Projection_LatLong
+    STC_Animal_Movement_time_period_subset.df,
+    Zoom = NULL,
+    Type = "bing",
+    MergeTiles = TRUE,
+    Title = STC_Title,
+    proj = Projection_LatLong
   )
 
 ##: (retrieve and generate a basemap using the openstreetmap function)
 
 
-STC_Outliers <-  ##:Retrieve outliers from the dataset based on the geo distance between points 
-  Distance_Outlier_Calculator(total_dataframe = STC_Animal_Movement_time_period_subset.df,
-                              pop_dataframe = Population_Averaged_Track.df,t1 = t1,t2 = t2,outlier_buffer_in_km = 1000)
+STC_Outliers <-
+  ##:Retrieve outliers from the dataset based on the geo distance between points
+  Distance_Outlier_Calculator(
+    total_dataframe = STC_Animal_Movement_time_period_subset.df,
+    pop_dataframe = Population_Averaged_Track.df,
+    t1 = t1,
+    t2 = t2,
+    outlier_buffer_in_km = 1000
+  )
 
 ##: (Retrieve outliers from the dataset based on the geo distance between points with the same time stamp)
 
-STC_Interactions <-  ##:Retrieve possible interactions between individuals from the dataset based on the geo distance between points 
-  Distance_Interaction_Calculator(total_dataframe = STC_Animal_Movement_time_period_subset.df,
-                                  t1 = t1,t2 = t2,interaction_radius_in_km = 10)
+STC_Interactions <-
+  ##:Retrieve possible interactions between individuals from the dataset based on the geo distance between points
+  Distance_Interaction_Calculator(
+    total_dataframe = STC_Animal_Movement_time_period_subset.df,
+    t1 = t1,
+    t2 = t2,
+    interaction_radius_in_km = 10
+  )
 
 ##: (Retrieve possible interactions between individuals from the dataset based on the geo distance between points with the same time stamp)
 
@@ -227,39 +246,138 @@ STC_Interactions <-  ##:Retrieve possible interactions between individuals from 
 ### Generate internal STC visualizations for exploratory data anaylsis (initial visualization
 ### consists of the STC cube and basemap, any and all other additions are the users choice
 
-Animal_STC <- ##: Visualize the STC
-  STC_Internal_Visualization_Setup(
-    dataframe = STC_Animal_Movement_time_period_subset.df,
-    STC_Title = STC_Title,subtitle = subtitle,proj = "LL"
-  )
+rgl.close() 
+
+mfrow3d(1, 2) ##: use only if visualizing two plots or more within the device scene
+
+STC_2D_Background_Visualization(
+  map = STC_Base_Map,
+  STC_Animal_Movement_time_period_subset.df$long,
+  STC_Animal_Movement_time_period_subset.df$lat
+)
+
+next3d(reuse = FALSE) ##: move on to using another scene section
+
+##: Visualize the STC
+
+STC_Internal_Visualization_Setup (
+  dataframe = STC_Animal_Movement_time_period_subset.df,
+  STC_Title = STC_Title,
+  subtitle = subtitle,
+  proj = "LL"
+)
 
 ##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
 ##: being explored)
 
-STC_3d_Base_Map <- ##: Visualize the Base Map within the STC
-  STC_Base_Map_3d_Visualizer(STC_Base_Map,STC_Animal_Movement.df,zvalue = 9350,alpha = 1)
+##: Visualize the Base Map within the STC
+
+STC_Base_Map_3d_Visualizer(STC_Base_Map,
+                           STC_Animal_Movement.df,
+                           zvalue = 9350,
+                           alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
 ##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
 
-STC_Internal_pls_visualization <-
-  ##: visualize points, lines or spheres within the STC
-  STC_Internal_Point_Line_Sphere_Visualizer(
-    STC_Outliers,x = STC_Outliers$long,
-    y = STC_Outliers$lat,z = STC_Outliers$TimeDateNumeric,
-    Type = "s",add = TRUE,color = "yellow"
-  )
+
+##: visualize points, lines or spheres within the STC
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  Population_Averaged_Track.df,
+  x = Population_Averaged_Track.df$long,
+  y = Population_Averaged_Track.df$lat,
+  z = Population_Averaged_Track.df$TimeDateNumeric,
+  Type = "l",
+  add = TRUE,
+  color = "purple"
+)
+
+
+##: visualize points, lines or spheres within the STC (visualize interactions)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Interactions,
+  x = STC_Interactions$long,
+  y = STC_Interactions$lat,
+  z = STC_Interactions$TimeDateNumeric,
+  Type = "s",
+  add = TRUE,
+  color = "red"
+)
+
+
+##: visualize points, lines or spheres within the STC (visualize outliers)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Outliers,
+  x = STC_Outliers$long,
+  y = STC_Outliers$lat,
+  z = STC_Outliers$TimeDateNumeric,
+  Type = "s",
+  add = TRUE,
+  color = "yellow"
+)
 
 ##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
 
 
-STC_Internal_KDE_Visualization <- ##: Visualize the STC KDE data
-  STC_Internal_KDE_Visualizer(
-    STC_Animal_Movement_KDE,
-    colors = c("red","green"),drawpoints = T, add = T
-  )
+##: Visualize the STC KDE data
+
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE,
+  colors = c("orange", "green"),
+  drawpoints = T,
+  add = T
+)
 
 ##: (add to the STC visualization scene the STC KDE data for exploratorary data analysis)
+
+
+##: Construct a legend
+
+##: Legend Info (each value between ,, corresponds to one legend item ordered categorically)
+
+symbolnames <- c(
+  "xy locations",
+  "xyz Locations",
+  "Population Track",
+  "Outliers",
+  "Interactions",
+  "KDE estimate 50%",
+  "KDE Estimate 95%"
+)
+
+pointsymbols <- c(1, 16, NA, 19, 19, 15, 15)
+pointsizes <- c(1,1,NA,2,2,2,2)
+linesymbols <- c(NA, NA, 1, NA, NA, NA, NA)
+colors <-
+  c("red", "blue", "purple", "yellow", "red", "green", "orange")
+
+##: Make the legend
+
+legend3d(
+  "topright",
+  symbolnames,
+  pch = pointsymbols,
+  lty = linesymbols,
+  col = colors,
+  bty = "n",
+  text.col = "blue",
+  text.font = 3,
+  cex = 1.2,
+  pt.cex = pointsizes,
+  title = "Legend"
+)
+
+##: add point info to the visualization
+
+STC_add_point_info(
+  dataframe_being_visualized = STC_Interactions,
+  chosen_dataframe_column = STC_Interactions$Identifier
+)
+
+##: (add point info to the visualization next to the subject points)
 
 ########################################################################################
 ########################################################################################
@@ -286,17 +404,20 @@ STC_Point_locations <- ##: Select Points of interest
 ##: including identifiers)
 
 STC_Selected_Points.df <- ##: retireve previously selected points
-  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,STC_Point_locations) ##: retrieve points of interest
+  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,
+                      STC_Point_locations) ##: retrieve points of interest
 
 STC_Selected_Points.df
 
-##: (retreive selected points of interest from within a dataset based on their location)
+##: (retreive selected points of interest from within   a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-  fmt = "png",filename = "Thesis_STC_Output/Test_Plot_LL_buffalo_KDE.png")
+  fmt = "png", filename = "Thesis_STC_Output/Test_2D and 3D_plot_Swainson_Hawks.png")
 
 writeWebGL (##: write the current scene to HTML:
-  dir = "Thesis_STC_Output/",filename = "Test_Plot_Base_Map_Progress.html",snapshot = T)
+  dir = "Thesis_STC_Output/",
+  filename = "Test_Plot_Base_Map_Progress.html",
+  snapshot = T)
 
 ########################################################################################
 ########################################################################################

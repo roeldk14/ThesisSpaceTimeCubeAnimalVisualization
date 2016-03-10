@@ -37,6 +37,9 @@ STC_Base_Map_Generator <-
     
   }
 
+########################################################################################
+########################################################################################
+
 ### Function to add a z value to an OSM map and visualize it
 
 ### All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman)

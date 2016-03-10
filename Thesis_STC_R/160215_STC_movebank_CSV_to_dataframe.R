@@ -39,9 +39,3 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   
   STC_animal_data.df <- na.omit(STC_animal_data.df)
 }
-## check data columns and new data frame
-# typeof(Identifier[1])
-# head(TimeDate)
-# head(TimeDateNumeric)
-# head(Swainsons_STC_Data.df$Identifier)
-# typeof(Swainsons_STC_Data.df$Identifier[1])
