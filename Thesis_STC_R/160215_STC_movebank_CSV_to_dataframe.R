@@ -36,6 +36,4 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
       "long" = Lon, "lat" = Lat, "TimeDate" = TimeDate, "TimeDateNumeric" = TimeDateNumeric,
       "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,stringsAsFactors = F
     )
-  
-  STC_animal_data.df <- na.omit(STC_animal_data.df)
 }
