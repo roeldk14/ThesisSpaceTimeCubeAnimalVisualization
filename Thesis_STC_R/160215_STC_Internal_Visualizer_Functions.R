@@ -81,10 +81,10 @@ STC_Internal_Point_Line_Sphere_Visualizer <-
            color = as.numeric(as.factor(dataframe$Identifier)),
            add = TRUE,
            size = 5,
-           radius = 2,
+           shapesize = 1,
            ...) {
-    if (Type == "p" | Type == "l" | Type == "s" | Type == "sp") {
-      if (Type == "p") {
+    if (Type == "point" | Type == "line" | Type == "sphere" | Type == "tetra" | Type == "cube" | Type == "sprite") {
+      if (Type == "point") {
         points3d(x,
                  y,
                  z,
@@ -93,23 +93,31 @@ STC_Internal_Point_Line_Sphere_Visualizer <-
                  size = size,
                  ...)
       }
-      if (Type == "l") {
+      if (Type == "line") {
         lines3d(x, y, z, color = color, add = add, ...)
       }
-      if (Type == "s") {
+      if (Type == "sphere") {
         spheres3d(x,
                   y,
                   z,
                   color = color,
                   add = add,
-                  radius = radius,
+                  radius = shapesize,
                   ...)
       }
-      if (Type == "sp") {
+      if (Type == "tetra") {
+        shapelist3d(tetrahedron3d(), x, y, z, size =  shapesize, 
+                    color = color, add = add, ...)
+      }
+      if (Type == "cube") {
+        shapelist3d(cube3d(), x, y, z, size =  shapesize, 
+                    color = color, add = add, ...)
+      }
+      if (Type == "sprite") {
         sprites3d(x, y, z, color = color, add = add, ...)
       }
     }
-    warning("Type must equal 'p' for point or 'l' for line or 's' for sphere or 'sp' for sprite")
+    warning("Type must equal 'point' or 'line' or 'sphere' or 'tetra' for tetrahedron or 'cube' or 'sprite' ")
   }
 
 ########################################################################################

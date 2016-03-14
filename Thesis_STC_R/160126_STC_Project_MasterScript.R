@@ -41,7 +41,7 @@ getwd()
 # install.packages("OpenStreetMap")
 # install.packages("spatstat")
 # install.packages("PBSmapping")
-#install.packages("fields")
+# install.packages("fields")
 
 ##: Load Libraries
 
@@ -288,7 +288,7 @@ STC_Internal_Point_Line_Sphere_Visualizer(
   x = Population_Averaged_Track.df$long,
   y = Population_Averaged_Track.df$lat,
   z = Population_Averaged_Track.df$TimeDateNumeric,
-  Type = "l",
+  Type = "line",
   add = TRUE,
   color = "purple"
 )
@@ -301,7 +301,7 @@ STC_Internal_Point_Line_Sphere_Visualizer(
   x = STC_Interactions$long,
   y = STC_Interactions$lat,
   z = STC_Interactions$TimeDateNumeric,
-  Type = "s",
+  Type = "sphere",
   add = TRUE,
   color = "red"
 )
@@ -314,7 +314,7 @@ STC_Internal_Point_Line_Sphere_Visualizer(
   x = STC_Outliers$long,
   y = STC_Outliers$lat,
   z = STC_Outliers$TimeDateNumeric,
-  Type = "s",
+  Type = "cube",
   add = TRUE,
   color = "yellow"
 )
@@ -338,6 +338,8 @@ STC_Internal_KDE_Visualizer(
 
 ##: Legend Info (each value between ,, corresponds to one legend item ordered categorically)
 
+##: symbology corresponding to numbers can be found at "http://www.statmethods.net/advgraphs/parameters.html"
+
 symbolnames <- c(
   "xy locations",
   "xyz Locations",
@@ -348,7 +350,7 @@ symbolnames <- c(
   "KDE Estimate 95%"
 )
 
-pointsymbols <- c(1, 16, NA, 19, 19, 15, 15)
+pointsymbols <- c(1, 16, NA, 15, 19, 15, 15)
 pointsizes <- c(1,1,NA,2,2,2,2)
 linesymbols <- c(NA, NA, 1, NA, NA, NA, NA)
 colors <-
