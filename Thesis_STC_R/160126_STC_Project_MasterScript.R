@@ -42,6 +42,7 @@ getwd()
 # install.packages("spatstat")
 # install.packages("PBSmapping")
 # install.packages("fields")
+# install.packages("rglwidget")
 
 ##: Load Libraries
 
@@ -60,12 +61,12 @@ library("OpenStreetMap")
 library("spatstat")
 library("PBSmapping")
 library("fields")
+library("rglwidget")
 
 ##: Load Functions
 
 source("Thesis_STC_R/160215_STC_movebank_CSV_to_dataframe.R")
 source("Thesis_STC_R/160216_STC_Time_Period_Selector.R")
-source("Thesis_STC_R/160222_STC_Geocentre_Midpoint_Calculator.R")
 source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
 source("Thesis_STC_R/160302_STC_Dataframe_List_Maker_By_Individual.R")
@@ -87,6 +88,8 @@ STC_Animal_Movement.df <-
 head(STC_Animal_Movement.df)
 tail(STC_Animal_Movement.df)
 
+range(STC_Animal_Movement.df$TimeDate)
+
 unique(STC_Animal_Movement.df$Identifier)
 ########################################################################################
 ########################################################################################
@@ -97,8 +100,8 @@ unique(STC_Animal_Movement.df$Identifier)
 
 ##: Time period of interest
 
-t1 <- "1995-08-18"
-t2 <- "1996-03-19"
+t1 <- "1995-07-29"
+t2 <- "1998-06-24"
 
 ##: Summer Period
 
@@ -246,7 +249,7 @@ STC_Interactions <-
 ### Generate internal STC visualizations for exploratory data anaylsis (initial visualization
 ### consists of the STC cube and basemap, any and all other additions are the users choice
 
-rgl.close() 
+rgl.close()
 
 mfrow3d(1, 2) ##: use only if visualizing two plots or more within the device scene
 
@@ -351,7 +354,7 @@ symbolnames <- c(
 )
 
 pointsymbols <- c(1, 16, NA, 15, 19, 15, 15)
-pointsizes <- c(1,1,NA,2,2,2,2)
+pointsizes <- c(1, 1, NA, 2, 2, 2, 2)
 linesymbols <- c(NA, NA, 1, NA, NA, NA, NA)
 colors <-
   c("red", "blue", "purple", "yellow", "red", "green", "orange")
@@ -414,13 +417,19 @@ STC_Selected_Points.df
 ##: (retreive selected points of interest from within   a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-  fmt = "png", filename = "Thesis_STC_Output/Test_2D and 3D_plot_Swainson_Hawks.png")
+  fmt = "png", filename = "Thesis_STC_Output/Full_Time_Frame_Swainson_Hawks.png")
 
-writeWebGL (##: write the current scene to HTML:
-  dir = "Thesis_STC_Output/",
-  filename = "Test_Plot_Base_Map_Progress.html",
-  snapshot = T)
+writeWebGL (
+  ##: write the current scene to HTML:
+  dir = "webGL",
+  filename = file.path(dir, "Full_Time_Frame_Swainson_Hawks.html"),
+  template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
+  ,
+  snapshot = T
+)
 
+visual <- scene3d()
+plot3d(visual)
 ########################################################################################
 ########################################################################################
 ########################################################################################

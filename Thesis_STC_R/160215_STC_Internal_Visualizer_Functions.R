@@ -81,7 +81,8 @@ STC_Internal_Point_Line_Sphere_Visualizer <-
            color = as.numeric(as.factor(dataframe$Identifier)),
            add = TRUE,
            size = 5,
-           shapesize = 1,
+           shapesize = 0.5,
+           radius = 2,
            ...) {
     if (Type == "point" | Type == "line" | Type == "sphere" | Type == "tetra" | Type == "cube" | Type == "sprite") {
       if (Type == "point") {
@@ -102,7 +103,7 @@ STC_Internal_Point_Line_Sphere_Visualizer <-
                   z,
                   color = color,
                   add = add,
-                  radius = shapesize,
+                  radius = radius,
                   ...)
       }
       if (Type == "tetra") {
