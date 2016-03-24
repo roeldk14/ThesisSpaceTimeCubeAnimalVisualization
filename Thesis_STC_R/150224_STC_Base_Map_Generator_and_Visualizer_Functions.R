@@ -48,9 +48,6 @@ STC_Base_Map_3d_Visualizer  <- function(map, dataset, zvalue = 0, ...) {
   if (length(map$tiles) != 1) {
     stop("multiple tiles not implemented")
   }
-  if (zvalue == 0) {
-    zvalue <- min(dataset$TimeDateNumeric)
-  }
   nx = map$tiles[[1]]$xres
   ny = map$tiles[[1]]$yres
   xmin = map$tiles[[1]]$bbox$p1[1]

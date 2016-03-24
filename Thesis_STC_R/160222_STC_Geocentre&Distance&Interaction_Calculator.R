@@ -83,6 +83,7 @@ Distance_Outlier_Calculator <-
     Identifier.names <- c()
     TimeDate <- c()
     TimeDateNumeric <- c()
+    Days_Count <- c()
     Distance_list <- c()
     UTM.East.list <- c()
     UTM.North.list <- c()
@@ -142,6 +143,7 @@ Distance_Outlier_Calculator <-
               append(UTM.North.list,total_dataframe_time_selection_single$UTM.North[[1]])
             utmzone <-
               append(utmzone,total_dataframe_time_selection_single$utmzone)
+            Days_Count <- append(Days_Count,total_dataframe_time_selection_single$Days_Count[1])
             
           }
         }
@@ -154,11 +156,12 @@ Distance_Outlier_Calculator <-
     TimeDate <- na.omit(TimeDate)
     TimeDateNumeric <- na.omit(TimeDateNumeric)
     utmzone <- na.omit(utmzone)
+    Days_Count <- na.omit(Days_Count)
     
     output.df <-
       data.frame(
         "long" = long.list,"lat" = lat.list, "Identifier" = Identifier.names,
-        TimeDate,TimeDateNumeric, "UTM.East" = UTM.East.list, "UTM.North" = UTM.North.list,
+        TimeDate,TimeDateNumeric,Days_Count, "UTM.East" = UTM.East.list, "UTM.North" = UTM.North.list,
         utmzone, "Distance" = Distance_list, check.names = T,check.rows = T,
         stringsAsFactors = F
       )
@@ -203,6 +206,7 @@ Distance_Interaction_Calculator <-
     Identifier.names <- c()
     TimeDate <- c()
     TimeDateNumeric <- c()
+    Days_Count <- c()
     Distance_list <- c()
     UTM.East.list <- c()
     UTM.North.list <- c()
@@ -263,6 +267,7 @@ Distance_Interaction_Calculator <-
                 append(UTM.North.list,total_dataframe_beta_time_selection$UTM.North[[k]])
               utmzone <-
                 append(utmzone,total_dataframe_beta_time_selection$utmzone[k])
+              Days_Count <- append(Days_Count,total_dataframe_beta_time_selection$Days_Count[k])
               
             }
           }
@@ -276,11 +281,12 @@ Distance_Interaction_Calculator <-
     TimeDate <- na.omit(TimeDate)
     TimeDateNumeric <- na.omit(TimeDateNumeric)
     utmzone <- na.omit(utmzone)
+    Days_Count <- na.omit(Days_Count)
     
     output.df <-
       data.frame(
         "long" = long.list,"lat" = lat.list, "Identifier" = Identifier.names,
-        TimeDate,TimeDateNumeric, "UTM.East" = UTM.East.list, "UTM.North" = UTM.North.list,
+        TimeDate,TimeDateNumeric,Days_Count, "UTM.East" = UTM.East.list, "UTM.North" = UTM.North.list,
         utmzone, "Distance" = Distance_list, check.names = T,check.rows = T,
         stringsAsFactors = F
       )

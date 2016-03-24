@@ -43,6 +43,7 @@ getwd()
 # install.packages("PBSmapping")
 # install.packages("fields")
 # install.packages("rglwidget")
+# install.packages("plotKML")
 
 ##: Load Libraries
 
@@ -62,6 +63,7 @@ library("spatstat")
 library("PBSmapping")
 library("fields")
 library("rglwidget")
+library("plotKML")
 
 ##: Load Functions
 
@@ -88,7 +90,9 @@ STC_Animal_Movement.df <-
 head(STC_Animal_Movement.df)
 tail(STC_Animal_Movement.df)
 
-range(STC_Animal_Movement.df$TimeDate)
+totaltimerange <- range(STC_Animal_Movement.df$TimeDate)
+
+paste(totaltimerange)
 
 unique(STC_Animal_Movement.df$Identifier)
 ########################################################################################
@@ -100,8 +104,8 @@ unique(STC_Animal_Movement.df$Identifier)
 
 ##: Time period of interest
 
-t1 <- "1995-07-29"
-t2 <- "1998-06-24"
+t1 <- totaltimerange[1]
+t2 <- totaltimerange[2]
 
 ##: Summer Period
 
@@ -121,7 +125,7 @@ Identifier <- "SW"
 
 STC_Title <- "Swainsons Hawk"
 
-subtitle <- "Initial Test Visualization"
+subtitle <- paste("Study Period", t1, ":", t2, sep = " ")
 
 boundingbox <-
   bounding.box.xy(x = STC_Animal_Movement.df$long, y = STC_Animal_Movement.df$lat)
@@ -163,6 +167,7 @@ Individual_Averaged_Animal_Movement_Tracks.df <-
 ##: on each day from all locations recorded on that day)
 
 head(Individual_Averaged_Animal_Movement_Tracks.df)
+tail(Individual_Averaged_Animal_Movement_Tracks.df)
 
 Population_Averaged_Track.df <-
   ##: Calculate Population Averaged Track for a chosen animal dataset
@@ -175,6 +180,7 @@ Population_Averaged_Track.df <-
 ##: on that day as long as n locations exceeds one, note: generally uses the individual tracks
 ##: function output )
 
+head(Population_Averaged_Track.df)
 tail(Population_Averaged_Track.df)
 
 
@@ -240,7 +246,6 @@ STC_Interactions <-
 
 ##: (Retrieve possible interactions between individuals from the dataset based on the geo distance between points with the same time stamp)
 
-
 ########################################################################################
 ########################################################################################
 ########################################################################################
@@ -255,8 +260,16 @@ mfrow3d(1, 2) ##: use only if visualizing two plots or more within the device sc
 
 STC_2D_Background_Visualization(
   map = STC_Base_Map,
-  STC_Animal_Movement_time_period_subset.df$long,
-  STC_Animal_Movement_time_period_subset.df$lat
+  points =
+    STC_Animal_Movement_time_period_subset.df,
+  outliers = STC_Outliers,
+  interactions = STC_Interactions,
+  colP = "red",
+  colO = "yellow",
+  colI = "blue",
+  title = STC_Title,
+  subtitle = subtitle,
+  coltext = "white"
 )
 
 next3d(reuse = FALSE) ##: move on to using another scene section
@@ -265,8 +278,8 @@ next3d(reuse = FALSE) ##: move on to using another scene section
 
 STC_Internal_Visualization_Setup (
   dataframe = STC_Animal_Movement_time_period_subset.df,
-  STC_Title = STC_Title,
-  subtitle = subtitle,
+  STC_Title = NULL,
+  subtitle = NULL,
   proj = "LL"
 )
 
@@ -277,7 +290,7 @@ STC_Internal_Visualization_Setup (
 
 STC_Base_Map_3d_Visualizer(STC_Base_Map,
                            STC_Animal_Movement.df,
-                           zvalue = 9350,
+                           zvalue = 0,
                            alpha = 1)
 
 ##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
@@ -290,7 +303,7 @@ STC_Internal_Point_Line_Sphere_Visualizer(
   Population_Averaged_Track.df,
   x = Population_Averaged_Track.df$long,
   y = Population_Averaged_Track.df$lat,
-  z = Population_Averaged_Track.df$TimeDateNumeric,
+  z = Population_Averaged_Track.df$Days_Count,
   Type = "line",
   add = TRUE,
   color = "purple"
@@ -303,10 +316,10 @@ STC_Internal_Point_Line_Sphere_Visualizer(
   STC_Interactions,
   x = STC_Interactions$long,
   y = STC_Interactions$lat,
-  z = STC_Interactions$TimeDateNumeric,
+  z = STC_Interactions$Days_Count,
   Type = "sphere",
   add = TRUE,
-  color = "red"
+  color = "blue"
 )
 
 
@@ -316,7 +329,7 @@ STC_Internal_Point_Line_Sphere_Visualizer(
   STC_Outliers,
   x = STC_Outliers$long,
   y = STC_Outliers$lat,
-  z = STC_Outliers$TimeDateNumeric,
+  z = STC_Outliers$Days_Count,
   Type = "cube",
   add = TRUE,
   color = "yellow"
@@ -344,20 +357,30 @@ STC_Internal_KDE_Visualizer(
 ##: symbology corresponding to numbers can be found at "http://www.statmethods.net/advgraphs/parameters.html"
 
 symbolnames <- c(
-  "xy locations",
-  "xyz Locations",
+  "locations (spatial)",
+  "outliers (spatial)",
+  "interactions (spatial)",
+  "Locations (space-time)",
+  "Outliers (space-time)",
+  "Interactions (space-time)",
   "Population Track",
-  "Outliers",
-  "Interactions",
   "KDE estimate 50%",
   "KDE Estimate 95%"
 )
 
-pointsymbols <- c(1, 16, NA, 15, 19, 15, 15)
-pointsizes <- c(1, 1, NA, 2, 2, 2, 2)
-linesymbols <- c(NA, NA, 1, NA, NA, NA, NA)
+pointsymbols <- c(1, 4, 8, 16, 15, 19, NA, 15, 15)
+pointsizes <- c(1, 1, 1, 1, 2, 2, NA, 2, 2)
+linesymbols <- c(NA, NA, NA, NA, NA, NA, 1, NA, NA)
 colors <-
-  c("red", "blue", "purple", "yellow", "red", "green", "orange")
+  c("red",
+    "Yellow",
+    "blue",
+    "Blue",
+    "yellow",
+    "blue",
+    "purple",
+    "green",
+    "orange")
 
 ##: Make the legend
 
@@ -378,11 +401,16 @@ legend3d(
 ##: add point info to the visualization
 
 STC_add_point_info(
-  dataframe_being_visualized = STC_Interactions,
-  chosen_dataframe_column = STC_Interactions$Identifier
+  dataframe_being_visualized = STC_Date_Info_Points,
+  chosen_dataframe_column = STC_Date_Info_Points$TimeDate
 )
 
 ##: (add point info to the visualization next to the subject points)
+
+
+STC_Date_Info_Points <-
+  ##: retrieve a sequence of points from within the dataframe so as to provide date info to a scene via text3d (STC_add_point_info)
+  Sequence_Date_points(dataframe = STC_Animal_Movement_time_period_subset.df, time_interval = 100)
 
 ########################################################################################
 ########################################################################################
@@ -430,10 +458,24 @@ writeWebGL (
 
 ##: Spin the visualized scene
 
-play3d( spin3d(axis=c(0,0,1)), duration=30 )
+play3d(spin3d(axis = c(0, 0, 1)), duration = 60)
+
+
+##: make a GIF movie of the visulized scene (requires imagemagick)
+
+movie3d(
+  f = spin3d(axis = c(0, 0, 1)),
+  duration = 15,
+  fps = 10,
+  movie = "STC_test_Swainson_Hawks",
+  frames = "STC_test_Swainson_Hawks",
+  dir = "Thesis_STC_Output",
+  convert = TRUE,
+  clean = TRUE,
+  type = "gif",
+  startTime = 0
+)
 
 ########################################################################################
 ########################################################################################
 ########################################################################################
-
-plotkml

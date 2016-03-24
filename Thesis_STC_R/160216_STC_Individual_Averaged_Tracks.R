@@ -88,6 +88,7 @@ STC_Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
   Identifier.names <- c()
   TimeDate <- c()
   TimeDateNumeric <- c()
+  Days_Count <- c()
   
   ## loop calculating the average lat/long for each individual per unique date
   
@@ -145,6 +146,7 @@ STC_Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
         Identifier.names <- append(Identifier.names,Identifiers[i])
         TimeDate <- append(TimeDate,Movement_Calendar[j])
         TimeDateNumeric <- append(TimeDateNumeric,Numeric_Movement_Calendar[j])
+        Days_Count <- append(Days_Count,dataframe.individual.selection$Days_Count[1])
       }
     }
     
@@ -155,12 +157,9 @@ STC_Individual_Averaged_Tracks_Calculator <- function(dataframe,t1,t2) {
   Individual_mean_tracks.df <-
     data.frame(
       "long" = long.list,"lat" = lat.list, "Identifier" = Identifier.names,
-      TimeDate,TimeDateNumeric,check.names = T,check.rows = T,
+      TimeDate,TimeDateNumeric,Days_Count,check.names = T,check.rows = T,
       stringsAsFactors = F
     )
   return(Individual_mean_tracks.df)
 }
 
-## check dataframe output as neccescary
-
-#head(Individual_mean_tracks.df)

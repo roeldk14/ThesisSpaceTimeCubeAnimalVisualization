@@ -88,6 +88,7 @@ STC_Population_Averaged_Track_Calculator <-
     pop.Identifier <- c()
     pop.TimeDate <- c()
     pop.TimeDateNumeric <- c()
+    pop.Days_Count <- c()
     
     ## loop calculating the average lat/long for the population per unique date
     
@@ -140,6 +141,7 @@ STC_Population_Averaged_Track_Calculator <-
         pop.Identifier <- append(pop.Identifier,Identifier)
         pop.TimeDate <- append(pop.TimeDate,Movement_Calendar[j])
         pop.TimeDateNumeric <- append(pop.TimeDateNumeric,Numeric_Movement_Calendar[j])
+        pop.Days_Count <- append(pop.Days_Count,dataframe.selection$Days_Count[1])
       }
     }
     
@@ -148,7 +150,7 @@ STC_Population_Averaged_Track_Calculator <-
     Population_mean_track.df <-
       data.frame(
         "long" = pop.long.list, "lat" = pop.lat.list,"Identifier" = pop.Identifier,
-        "TimeDate" = pop.TimeDate,"TimeDateNumeric" = pop.TimeDateNumeric,stringsAsFactors = F)
+        "TimeDate" = pop.TimeDate,"TimeDateNumeric" = pop.TimeDateNumeric,"Days_Count" = pop.Days_Count, stringsAsFactors = F)
     
     return(Population_mean_track.df)
   }

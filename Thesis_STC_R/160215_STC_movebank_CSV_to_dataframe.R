@@ -29,6 +29,8 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
   }
   UTM.North <- Animal_dataset$utm.northing
   
+  
+  
   ## recreate dataframe with relevant columns
   
   STC_animal_data.df <-
@@ -36,4 +38,8 @@ STC_Movebank_CSVtoDF <- function(CSV_File_Pathway) {
       "long" = Lon, "lat" = Lat, "TimeDate" = TimeDate, "TimeDateNumeric" = TimeDateNumeric,
       "Identifier" = Identifier, "UTM.East" = UTM.East, "UTM.North" = UTM.North,stringsAsFactors = F
     )
+  
+  STC_animal_data.df$Days_Count <- as.double(lapply(STC_animal_data.df$TimeDate,function(x) { x - min(STC_animal_data.df$TimeDate) }))
+  
+  return(STC_animal_data.df)
 }
