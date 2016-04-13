@@ -171,7 +171,7 @@ STC_Identify3d <- function(visualized_dataframe, proj = "LL") {
         ),
         ncol = 3
       )
-    identify3d(x = xyzanimal.matrix,
+    output <- identify3d(x = xyzanimal.matrix,
                labels = visualized_dataframe$Identifier,
                plot = TRUE)
   }
@@ -185,11 +185,12 @@ STC_Identify3d <- function(visualized_dataframe, proj = "LL") {
         ),
         ncol = 3
       )
-    identify3d(x = xyzanimal.matrix,
+    output <-  identify3d(x = xyzanimal.matrix,
                labels = visualized_dataframe$Identifier,
                plot = TRUE)
   }
   warning("proj must equal either 'LL' for Lat/Long or 'UTM' for Universal Transverse Mercator")
+  return(output)
 }
 
 ########################################################################################

@@ -27,43 +27,37 @@ getwd()
 
 ##: Install required packages
 
-# install.packages("SpatialEpi")
 # install.packages("ks")
-# install.packages("zoom")
-# install.packages("geotools")
 # install.packages("rgdal")
 # install.packages("sp")
-# install.packages("rgeos")
 # install.packages("ggplot2")
 # install.packages("rgl")
-# install.packages("dismo")
-# install.packages("XML")
 # install.packages("OpenStreetMap")
 # install.packages("spatstat")
 # install.packages("PBSmapping")
 # install.packages("fields")
 # install.packages("rglwidget")
 # install.packages("plotKML")
+# install.packages("spacetime")
+# install.packages("R2G2")
+
 
 ##: Load Libraries
 
-#library("SpatialEpi")
+
 library("ks")
-#library("zoom")
-#library("geotools")
-#library("rgeos")
 library("rgdal")
 library("sp")
 library("ggplot2")
 library("rgl")
-#library("dismo")
-#library("XML")
 library("OpenStreetMap")
 library("spatstat")
 library("PBSmapping")
 library("fields")
 library("rglwidget")
 library("plotKML")
+library("spacetime")
+library("R2G2")
 
 ##: Load Functions
 
@@ -71,7 +65,7 @@ source("Thesis_STC_R/160215_STC_movebank_CSV_to_dataframe.R")
 source("Thesis_STC_R/160216_STC_Time_Period_Selector.R")
 source("Thesis_STC_R/160216_STC_Individual_Averaged_Tracks.R")
 source("Thesis_STC_R/160222_STC_Population_Averaged_Track.R")
-source("Thesis_STC_R/160302_STC_Dataframe_List_Maker_By_Individual.R")
+source("Thesis_STC_R/160302_STC_Dataframe&Lines_List_Maker_By_Individual.R")
 source("Thesis_STC_R/160216_STC_KDE_Calculator.R")
 source("Thesis_STC_R/160303_STC_Reproject_LatLong_to_UTM_Functions_Script.R")
 source("Thesis_STC_R/160222_STC_Geocentre&Distance&Interaction_Calculator.R")
@@ -107,10 +101,10 @@ unique(STC_Animal_Movement.df$Identifier)
 t1 <- totaltimerange[1]
 t2 <- totaltimerange[2]
 
-##: Summer Period
+##: Sub Period of Interest
 
-St1 <- "1995-05-01"
-St2 <- "1995-09-30"
+St1 <- "1996-05-01"
+St2 <- "1997-05-01"
 
 ##: Winter Period
 
@@ -126,6 +120,8 @@ Identifier <- "SW"
 STC_Title <- "Swainsons Hawk"
 
 subtitle <- paste("Study Period", t1, ":", t2, sep = " ")
+
+subtitle_subperiod <- paste("Study Period", St1, ":", St2, sep = " ")
 
 boundingbox <-
   bounding.box.xy(x = STC_Animal_Movement.df$long, y = STC_Animal_Movement.df$lat)
@@ -189,6 +185,9 @@ STC_Animal_Movement_Individuals.List.df <-
   STC_Individuals_Dataframe_List_Maker(Individual_Averaged_Animal_Movement_Tracks.df)
 
 ##: (split a dataframe into smaller dataframes containing individuals dataframes contained within a list)
+
+STC_Animal_Movement_Individuals.Lines <- ##: Make a List of Line objects
+  STC_Individuals_Lines_List_Maker(STC_Animal_Movement_Individuals.List.df)
 
 STC_Animal_Movement_KDE <-
   ##: calculate KDE for a chosen animal dataset
@@ -341,12 +340,49 @@ STC_Internal_Point_Line_Sphere_Visualizer(
 ##: Visualize the STC KDE data
 
 STC_Internal_KDE_Visualizer(
-  STC_Animal_Movement_KDE,
+  STC_Animal_Movement_KDE_part_1,
   colors = c("orange", "green"),
-  drawpoints = T,
+  drawpoints = F,
   add = T
 )
 
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_2,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_3,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_4,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_5,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_6,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_7,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
 ##: (add to the STC visualization scene the STC KDE data for exploratorary data analysis)
 
 
@@ -364,8 +400,8 @@ symbolnames <- c(
   "Outliers (space-time)",
   "Interactions (space-time)",
   "Population Track",
-  "KDE estimate 50%",
-  "KDE Estimate 95%"
+  "KDE estimate 50% (Home Range)",
+  "KDE Estimate 95% (Home Range)"
 )
 
 pointsymbols <- c(1, 4, 8, 16, 15, 19, NA, 15, 15)
@@ -445,7 +481,7 @@ STC_Selected_Points.df
 ##: (retreive selected points of interest from within   a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-  fmt = "png", filename = "Thesis_STC_Output/Full_Time_Frame_Swainson_Hawks.png")
+  fmt = "png", filename = "Thesis_STC_Output/Final_Productv3.png")
 
 writeWebGL (
   ##: write the current scene to HTML:
@@ -458,7 +494,7 @@ writeWebGL (
 
 ##: Spin the visualized scene
 
-play3d(spin3d(axis = c(0, 0, 1)), duration = 60)
+play3d(spin3d(axis = c(0, 0, 1)), duration = 30)
 
 
 ##: make a GIF movie of the visulized scene (requires imagemagick)
@@ -466,16 +502,511 @@ play3d(spin3d(axis = c(0, 0, 1)), duration = 60)
 movie3d(
   f = spin3d(axis = c(0, 0, 1)),
   duration = 15,
-  fps = 10,
-  movie = "STC_test_Swainson_Hawks",
-  frames = "STC_test_Swainson_Hawks",
+  fps = 15,
+  movie = "Swainson_Hawks_Finalv3",
+  frames = "Swainson_Hawks_Finalv3",
   dir = "Thesis_STC_Output",
   convert = TRUE,
   clean = TRUE,
   type = "gif",
-  startTime = 0
+  startTime = 0,
 )
 
 ########################################################################################
 ########################################################################################
 ########################################################################################
+
+### Examples 1 all three units of interest
+
+rgl.close()
+
+mfrow3d(1, 3) ##: use only if visualizing two plots or more within the device scene
+
+##: Visualize the STC
+
+STC_Internal_Visualization_Setup (
+  dataframe = STC_Animal_Movement_Individuals.List.df$SW17,
+  STC_Title = STC_Title,
+  subtitle = subtitle_subperiod,
+  proj = "LL"
+)
+
+##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
+##: being explored)
+
+##: Visualize the Base Map within the STC
+
+STC_Base_Map_3d_Visualizer(STC_Base_Map,
+                           STC_Animal_Movement.df,
+                           zvalue = 350,
+                           alpha = 1)
+
+##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
+##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
+
+
+##: visualize points, lines or spheres within the STC
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW23,
+  x = STC_Animal_Movement_Individuals.List.df$SW23$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW23lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW23$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "black"
+)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW25,
+  x = STC_Animal_Movement_Individuals.List.df$SW25$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW25$lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW25$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "blue"
+)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW16,
+  x = STC_Animal_Movement_Individuals.List.df$SW16$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW16$lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW16$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "red"
+)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW17,
+  x = STC_Animal_Movement_Individuals.List.df$SW17$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW17$lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW17$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "orange"
+)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW27,
+  x = STC_Animal_Movement_Individuals.List.df$SW27$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW27$lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW27$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "green"
+)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW31,
+  x = STC_Animal_Movement_Individuals.List.df$SW31$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW31$lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW31$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "yellow"
+)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Animal_Movement_Individuals.List.df$SW41,
+  x = STC_Animal_Movement_Individuals.List.df$SW41$long,
+  y = STC_Animal_Movement_Individuals.List.df$SW41$lat,
+  z = STC_Animal_Movement_Individuals.List.df$SW41$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "pink"
+)
+##: visualize points, lines or spheres within the STC (visualize interactions)
+
+STC_Interactions_subset <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Interactions, St1, St2)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Interactions_subset,
+  x = STC_Interactions_subset$long,
+  y = STC_Interactions_subset$lat,
+  z = STC_Interactions_subset$Days_Count,
+  Type = "sphere",
+  add = TRUE,
+  color = "blue"
+)
+
+symbolnames <- c(
+  "SW23 Track",
+  "SW25 Track",
+  "SW16 Track",
+  "SW17 Track",
+  "SW27 Track",
+  "SW31 Track",
+  "SW41 Track",
+  "Interactions"
+)
+
+pointsymbols <- c(NA,NA,NA,NA,NA,NA,NA, 19)
+pointsizes <- c(NA,NA,NA,NA,NA,NA,NA,2)
+linesymbols <- c(1, 1, 1, 1, 1, 1, 1, NA)
+colors <-
+  c("black",
+    "blue",
+    "red",
+    "Orange",
+    "green",
+    "yellow",
+    "pink",
+    "blue")
+
+##: Make the legend
+
+legend3d(
+  "topright",
+  symbolnames,
+  pch = pointsymbols,
+  lty = linesymbols,
+  col = colors,
+  bty = "n",
+  text.col = "blue",
+  text.font = 3,
+  cex = 1.2,
+  pt.cex = pointsizes,
+  title = "Individual Tracks with Interactions"
+)
+
+########################################################################################
+########################################################################################
+
+next3d(reuse = FALSE) ##: move on to using another scene section
+
+STC_Internal_Visualization_Setup (
+  dataframe = STC_Animal_Movement_time_period_subset.df,
+  STC_Title = STC_Title,
+  subtitle = subtitle,
+  proj = "LL"
+)
+
+##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
+##: being explored)
+
+##: Visualize the Base Map within the STC
+
+STC_Base_Map_3d_Visualizer(STC_Base_Map,
+                           STC_Animal_Movement.df,
+                           zvalue = 0,
+                           alpha = 1)
+
+##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
+##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
+
+
+##: visualize points, lines or spheres within the STC
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  Population_Averaged_Track.df,
+  x = Population_Averaged_Track.df$long,
+  y = Population_Averaged_Track.df$lat,
+  z = Population_Averaged_Track.df$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "purple"
+)
+
+
+##: visualize points, lines or spheres within the STC (visualize interactions)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Interactions,
+  x = STC_Interactions$long,
+  y = STC_Interactions$lat,
+  z = STC_Interactions$Days_Count,
+  Type = "sphere",
+  add = TRUE,
+  color = "blue"
+)
+
+
+##: visualize points, lines or spheres within the STC (visualize outliers)
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  STC_Outliers,
+  x = STC_Outliers$long,
+  y = STC_Outliers$lat,
+  z = STC_Outliers$Days_Count,
+  Type = "cube",
+  add = TRUE,
+  color = "yellow"
+)
+
+##: (add to the STC visualization scene the STC track data for exploratorary data analysis)
+
+STC_add_point_info(
+  dataframe_being_visualized = STC_Date_Info_Points,
+  chosen_dataframe_column = STC_Date_Info_Points$TimeDate
+)
+
+symbolnames <- c(
+  "Outliers (space-time)",
+  "Interactions (space-time)",
+  "Population Track"
+)
+
+pointsymbols <- c(15, 19, NA)
+pointsizes <- c(2, 2, NA)
+linesymbols <- c(NA, NA, 1)
+colors <-
+  c(
+    "yellow",
+    "blue",
+    "purple")
+
+##: Make the legend
+
+legend3d(
+  "topright",
+  symbolnames,
+  pch = pointsymbols,
+  lty = linesymbols,
+  col = colors,
+  bty = "n",
+  text.col = "blue",
+  text.font = 3,
+  cex = 1.2,
+  pt.cex = pointsizes,
+  title = "Population Track with Outliers and Interactions"
+)
+
+########################################################################################
+########################################################################################
+
+next3d(reuse = FALSE) ##: move on to using another scene section
+
+STC_Internal_Visualization_Setup (
+  dataframe = STC_Animal_Movement_time_period_subset.df,
+  STC_Title = STC_Title,
+  subtitle = subtitle,
+  proj = "LL"
+)
+
+##: (Construct and Visualize the Space Time Cube to the specifications of the dataset
+##: being explored)
+
+##: Visualize the Base Map within the STC
+
+STC_Base_Map_3d_Visualizer(STC_Base_Map,
+                           STC_Animal_Movement.df,
+                           zvalue = 0,
+                           alpha = 1)
+
+##: (add z values to a previosly retrieved OSM base map and visualize it within the STC,
+##: All thanks and rights for the original script "map3d" go to StackOverLoader (Spacedman))
+
+
+##: visualize points, lines or spheres within the STC
+
+STC_Internal_Point_Line_Sphere_Visualizer(
+  Population_Averaged_Track.df,
+  x = Population_Averaged_Track.df$long,
+  y = Population_Averaged_Track.df$lat,
+  z = Population_Averaged_Track.df$Days_Count,
+  Type = "line",
+  add = TRUE,
+  color = "purple"
+)
+
+##: visualize points, lines or spheres within the STC (visualize interactions)
+##: Visualize the STC KDE data
+
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_1,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_2,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_3,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_4,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_5,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_6,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+
+STC_Internal_KDE_Visualizer(
+  STC_Animal_Movement_KDE_part_7,
+  colors = c("orange", "green"),
+  drawpoints = F,
+  add = T
+)
+
+symbolnames <- c(
+  "Population Track",
+  "KDE estimate 50% (Home Range)",
+  "KDE Estimate 95% (Home Range)"
+)
+
+pointsymbols <- c(NA, 15, 15)
+pointsizes <- c(NA, 2, 2)
+linesymbols <- c(1, NA, NA)
+colors <-
+  c(
+    "purple",
+    "green",
+    "orange")
+
+##: Make the legend
+
+legend3d(
+  "topright",
+  symbolnames,
+  pch = pointsymbols,
+  lty = linesymbols,
+  col = colors,
+  bty = "n",
+  text.col = "blue",
+  text.font = 3,
+  cex = 1.2,
+  pt.cex = pointsizes,
+  title = "Population Home ranges with the Population Track"
+)
+
+###############################################################################################
+###############################################################################################
+##points for KDE estimates: 3593 3600 4512 1346 3121 2994 3789  432 1962 1989 2040  810  852
+
+KDE_points <- c(3593, 3600, 4512, 1346, 3121, 2994, 3789,  432, 1962, 1989, 2040,  810,  852)
+STC_Selected_Points.df <- ##: retireve previously selected points
+  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,
+                      KDE_points) ##: retrieve points of interest
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet1 <- totaltimerange[1]
+kdet2 <- STC_Selected_Points.df$TimeDate[1]
+
+STC_Animal_Movement_time_period_KDE_subset.df1 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet1, kdet2)
+
+STC_Animal_Movement_KDE_part_1 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df1, proj = "LL")
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet3 <- STC_Selected_Points.df$TimeDate[2]
+kdet4 <- STC_Selected_Points.df$TimeDate[3]
+
+STC_Animal_Movement_time_period_KDE_subset.df2 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet3, kdet4)
+
+STC_Animal_Movement_KDE_part_2 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df2, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet5 <- STC_Selected_Points.df$TimeDate[4]
+kdet6 <- STC_Selected_Points.df$TimeDate[5]
+
+STC_Animal_Movement_time_period_KDE_subset.df3 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet5, kdet6)
+
+STC_Animal_Movement_KDE_part_3 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df3, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet7 <- STC_Selected_Points.df$TimeDate[6]
+kdet8 <- STC_Selected_Points.df$TimeDate[7]
+
+STC_Animal_Movement_time_period_KDE_subset.df4 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet7, kdet8)
+
+STC_Animal_Movement_KDE_part_4 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df4, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet9 <- STC_Selected_Points.df$TimeDate[8]
+kdet10 <- STC_Selected_Points.df$TimeDate[9]
+
+STC_Animal_Movement_time_period_KDE_subset.df5 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet9, kdet10)
+
+STC_Animal_Movement_KDE_part_5 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df5, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet11 <- STC_Selected_Points.df$TimeDate[10]
+kdet12 <- STC_Selected_Points.df$TimeDate[11]
+
+STC_Animal_Movement_time_period_KDE_subset.df6 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet11, kdet12)
+
+STC_Animal_Movement_KDE_part_6 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df6, proj = "LL")
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet13 <- STC_Selected_Points.df$TimeDate[12]
+kdet14 <- STC_Selected_Points.df$TimeDate[13]
+
+STC_Animal_Movement_time_period_KDE_subset.df7 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet13, kdet14)
+
+STC_Animal_Movement_KDE_part_7 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df7, proj = "LL")
+
