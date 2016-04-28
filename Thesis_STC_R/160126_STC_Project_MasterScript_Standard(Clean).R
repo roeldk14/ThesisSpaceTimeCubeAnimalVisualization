@@ -80,7 +80,7 @@ source("Thesis_STC_R/160215_STC_Internal_Visualizer_Functions.R")
 ##: (Open a chosen CSV file and write it to dataframe format (preferably from MoveBank.org))
 
 STC_Animal_Movement.df <-
-  STC_Movebank_CSVtoDF("Thesis_STC_Data/Swainson's Hawks.csv")
+  STC_Movebank_CSVtoDF("Dataset")
 
 ##: Investigate data
 
@@ -97,28 +97,28 @@ unique(STC_Animal_Movement.df$Identifier)
 
 ##: Time period of interest
 
-t1 <- "1995-08-18"
-t2 <- "1996-03-19"
+t1 <- "2000-01-31"
+t2 <- "2000-01-31"
 
 ##: Summer Period
 
-St1 <- "1995-05-01"
-St2 <- "1995-09-30"
+St1 <- "2000-01-31"
+St2 <- "2000-01-31"
 
 ##: Winter Period
 
-Wt1 <- "1995-11-01"
-Wt2 <- "1996-02-29"
+Wt1 <- "2000-01-31"
+Wt2 <- "2000-01-31"
 
 ##: Identifier
 
-Identifier <- "SW"
+Identifier <- "Unique(U)"
 
 ##: STC_Global_Title
 
-STC_Title <- "Swainsons Hawk"
+STC_Title <- "Species(etc)"
 
-subtitle <- "Initial Test Visualization"
+subtitle <- "Time period(etc)"
 
 boundingbox <-
   bounding.box.xy(x = STC_Animal_Movement.df$long, y = STC_Animal_Movement.df$lat)
@@ -370,6 +370,11 @@ legend3d(
   title = "Legend"
 )
 
+
+STC_Date_Info_Points <-
+  ##: retrieve a sequence of points from within the dataframe so as to provide date info to a scene via text3d (STC_add_point_info)
+  Sequence_Date_points(dataframe = STC_Animal_Movement_time_period_subset.df, time_interval = 100)
+
 ##: add point info to the visualization
 
 STC_add_point_info(
@@ -422,5 +427,3 @@ writeWebGL (##: write the current scene to HTML:
 ########################################################################################
 ########################################################################################
 ########################################################################################
-
-plotkml

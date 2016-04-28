@@ -1,7 +1,7 @@
 ### STC_Dataframe&Lines_List_Maker_By_Individual_Script Space_Time_Cube_Animal_Visualization
 ### 02\03\16
 
-### creates a list of dataframes where each dataframe holds the data of a seperate individual
+### creates a list of dataframes where each dataframe holds the data of a separate individual
 
 STC_Individuals_Dataframe_List_Maker <- function(dataframe) {
   

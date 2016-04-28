@@ -1,7 +1,7 @@
 ### STC_Internal_Visualizer_Functions_Script  Space_Time_Cube_Animal_Visualization
 ### 15\02\16
 
-### STC Visulization Functions from the RGL package and others specifically for internal analysis
+### STC Visualization Functions based on the RGL package and others specifically for internal analysis
 ### on the R platform
 
 ## STC visualization setup using plot3d
@@ -196,7 +196,7 @@ STC_Identify3d <- function(visualized_dataframe, proj = "LL") {
 ########################################################################################
 ########################################################################################
 
-## retreive selected points of interest from within a dataset based on their location
+## retrieve selected points of interest from within a dataset based on their location
 
 STC_Point_Retriever <- function(dataframe, point_locations) {
   selectedpoints.df <- data.frame()
@@ -226,15 +226,23 @@ STC_add_point_info <-
 ########################################################################################
 
 
-##: Add a 2d visualization of the data to the scene
+##: Add a 2D visualization of the data to the scene
 
 STC_2D_Background_Visualization <-
   function(map, points, outliers = NULL, interactions = NULL,colP = "red", colO = "yellow", colI = "Green",title,subtitle,coltext = "white") {
     subfun <- function(map, points, outliers = NULL, interactions = NULL,colP = "red", colO = "yellow", colI = "Green",title,subtitle,coltext = "white") {
       plot(map, raster = TRUE)
-      points(points$long, points$lat, col = colP)
+      lines(Population_Averaged_Track.df$long, Population_Averaged_Track.df$lat, col = "purple")
+      #points(points$long, points$lat, col = colP)
       points(outliers$long,outliers$lat, col = colO, pch = 4)
       points(interactions$long,interactions$lat, col = colI, pch = 8)
+      plot(Animal_Movement_KDE_part_1, col = "green",add = TRUE)
+      plot(Animal_Movement_KDE_part_2, col = "green",add = TRUE)
+      plot(Animal_Movement_KDE_part_3, col = "green",add = TRUE)
+      plot(Animal_Movement_KDE_part_4, col = "green",add = TRUE)
+      plot(Animal_Movement_KDE_part_5, col = "green",add = TRUE)
+      plot(Animal_Movement_KDE_part_6, col = "green",add = TRUE)
+      plot(Animal_Movement_KDE_part_7, col = "green",add = TRUE)
       title(main = title, line = 0, col.main = coltext, cex.main = 2)
       mtext(side = 1, subtitle, line = 1, col = coltext, cex = 1.5)
     }

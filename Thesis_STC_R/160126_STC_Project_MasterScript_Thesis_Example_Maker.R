@@ -244,7 +244,128 @@ STC_Interactions <-
   )
 
 ##: (Retrieve possible interactions between individuals from the dataset based on the geo distance between points with the same time stamp)
+###############################################################################################
+###############################################################################################
+##points for KDE estimates: 3593 3600 4512 1346 3121 2994 3789  432 1962 1989 2040  810  852
 
+KDE_points <- c(3593, 3600, 4512, 1346, 3121, 2994, 3789,  432, 1962, 1989, 2040,  810,  852)
+STC_Selected_Points.df <- ##: retireve previously selected points
+  STC_Point_Retriever(STC_Animal_Movement_time_period_subset.df,
+                      KDE_points) ##: retrieve points of interest
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet1 <- totaltimerange[1]
+kdet2 <- STC_Selected_Points.df$TimeDate[1]
+
+STC_Animal_Movement_time_period_KDE_subset.df1 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet1, kdet2)
+
+STC_Animal_Movement_KDE_part_1 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df1, proj = "LL")
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet3 <- STC_Selected_Points.df$TimeDate[2]
+kdet4 <- STC_Selected_Points.df$TimeDate[3]
+
+STC_Animal_Movement_time_period_KDE_subset.df2 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet3, kdet4)
+
+
+
+STC_Animal_Movement_KDE_part_2 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df2, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet5 <- STC_Selected_Points.df$TimeDate[4]
+kdet6 <- STC_Selected_Points.df$TimeDate[5]
+
+STC_Animal_Movement_time_period_KDE_subset.df3 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet5, kdet6)
+
+STC_Animal_Movement_KDE_part_3 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df3, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet7 <- STC_Selected_Points.df$TimeDate[6]
+kdet8 <- STC_Selected_Points.df$TimeDate[7]
+
+STC_Animal_Movement_time_period_KDE_subset.df4 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet7, kdet8)
+
+STC_Animal_Movement_KDE_part_4 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df4, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet9 <- STC_Selected_Points.df$TimeDate[8]
+kdet10 <- STC_Selected_Points.df$TimeDate[9]
+
+STC_Animal_Movement_time_period_KDE_subset.df5 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet9, kdet10)
+
+STC_Animal_Movement_KDE_part_5 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df5, proj = "LL")
+
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet11 <- STC_Selected_Points.df$TimeDate[10]
+kdet12 <- STC_Selected_Points.df$TimeDate[11]
+
+STC_Animal_Movement_time_period_KDE_subset.df6 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet11, kdet12)
+
+STC_Animal_Movement_KDE_part_6 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df6, proj = "LL")
+
+###############################################################################
+
+##: home range Time period of interest 1
+
+kdet13 <- STC_Selected_Points.df$TimeDate[12]
+kdet14 <- STC_Selected_Points.df$TimeDate[13]
+
+STC_Animal_Movement_time_period_KDE_subset.df7 <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Animal_Movement.df, kdet13, kdet14)
+
+STC_Animal_Movement_KDE_part_7 <-
+  ##: calculate KDE for a chosen animal dataset
+  STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df7, proj = "LL")
+
+################################################################################
 ########################################################################################
 ########################################################################################
 ########################################################################################
@@ -255,7 +376,7 @@ STC_Interactions <-
 
 rgl.close()
 
-mfrow3d(1, 2) ##: use only if visualizing two plots or more within the device scene
+mfrow3d(1, 1) ##: use only if visualizing two plots or more within the device scene
 
 STC_2D_Background_Visualization(
   map = STC_Base_Map,
@@ -393,22 +514,22 @@ STC_Internal_KDE_Visualizer(
 ##: symbology corresponding to numbers can be found at "http://www.statmethods.net/advgraphs/parameters.html"
 
 symbolnames <- c(
-  "locations (spatial)",
+  "population track (spatial)",
   "outliers (spatial)",
   "interactions (spatial)",
   "Locations (space-time)",
   "Outliers (space-time)",
   "Interactions (space-time)",
-  "Population Track",
+  "Population Track (space-time)",
   "KDE estimate 50% (Home Range)",
   "KDE Estimate 95% (Home Range)"
 )
 
-pointsymbols <- c(1, 4, 8, 16, 15, 19, NA, 15, 15)
-pointsizes <- c(1, 1, 1, 1, 2, 2, NA, 2, 2)
-linesymbols <- c(NA, NA, NA, NA, NA, NA, 1, NA, NA)
+pointsymbols <- c(NA, 4, 8, 16, 15, 19, NA, 15, 15)
+pointsizes <- c(NA, 1, 1, 1, 2, 2, NA, 2, 2)
+linesymbols <- c(1, NA, NA, NA, NA, NA, 1, NA, NA)
 colors <-
-  c("red",
+  c("purple",
     "Yellow",
     "blue",
     "Blue",
@@ -434,6 +555,10 @@ legend3d(
   title = "Legend"
 )
 
+STC_Date_Info_Points <-
+  ##: retrieve a sequence of points from within the dataframe so as to provide date info to a scene via text3d (STC_add_point_info)
+  Sequence_Date_points(dataframe = STC_Animal_Movement_time_period_subset.df, time_interval = 100)
+
 ##: add point info to the visualization
 
 STC_add_point_info(
@@ -442,11 +567,6 @@ STC_add_point_info(
 )
 
 ##: (add point info to the visualization next to the subject points)
-
-
-STC_Date_Info_Points <-
-  ##: retrieve a sequence of points from within the dataframe so as to provide date info to a scene via text3d (STC_add_point_info)
-  Sequence_Date_points(dataframe = STC_Animal_Movement_time_period_subset.df, time_interval = 100)
 
 ########################################################################################
 ########################################################################################
@@ -481,7 +601,7 @@ STC_Selected_Points.df
 ##: (retreive selected points of interest from within   a dataset based on their location)
 
 rgl.snapshot (##: take a snapshot of the current scene (png or pdf)
-  fmt = "png", filename = "Thesis_STC_Output/Final_Productv3.png")
+  fmt = "png", filename = "Thesis_STC_Output/Final_Productminus2D.png")
 
 writeWebGL (
   ##: write the current scene to HTML:
@@ -497,7 +617,7 @@ writeWebGL (
 play3d(spin3d(axis = c(0, 0, 1)), duration = 30)
 
 
-##: make a GIF movie of the visulized scene (requires imagemagick)
+##: make a GIF movie of the visualized scene (requires imagemagick)
 
 movie3d(
   f = spin3d(axis = c(0, 0, 1)),
@@ -516,11 +636,16 @@ movie3d(
 ########################################################################################
 ########################################################################################
 
+########################################################################################
+###: What follows are Visualizations of exemplars for a thesis report
+########################################################################################
+
+
 ### Examples 1 all three units of interest
 
 rgl.close()
 
-mfrow3d(1, 3) ##: use only if visualizing two plots or more within the device scene
+mfrow3d(1, 1) ##: use only if visualizing two plots or more within the device scene
 
 ##: Visualize the STC
 
@@ -927,6 +1052,8 @@ STC_Animal_Movement_time_period_KDE_subset.df2 <-
   ##: Subset time period of interest
   STC_time_period_selector(STC_Animal_Movement.df, kdet3, kdet4)
 
+
+
 STC_Animal_Movement_KDE_part_2 <-
   ##: calculate KDE for a chosen animal dataset
   STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df2, proj = "LL")
@@ -1009,4 +1136,90 @@ STC_Animal_Movement_time_period_KDE_subset.df7 <-
 STC_Animal_Movement_KDE_part_7 <-
   ##: calculate KDE for a chosen animal dataset
   STC_KDE_Calculator(STC_Animal_Movement_time_period_KDE_subset.df7, proj = "LL")
+
+################################################################################
+
+## Build test case for individuals with interactions 2d
+
+STC_2D_Background_Visualization(
+  map = STC_Base_Map,
+  points =
+    STC_Animal_Movement_time_period_subset.df,
+  outliers = STC_Outliers,
+  interactions = STC_Interactions,
+  colP = "red",
+  colO = "yellow",
+  colI = "blue",
+  title = STC_Title,
+  subtitle = subtitle,
+  coltext = "white"
+)
+
+  SW$23 color = "black"
+
+  SW$25 color = "blue"
+
+  SW$16 color = "red"
+
+  SW$17 color = "orange"
+
+  SW$27 color = "green"
+
+  SW31$ color = "yellow"
+  
+ SW$41 color = "pink"
+
+STC_Interactions_subset <-
+  ##: Subset time period of interest
+  STC_time_period_selector(STC_Interactions, St1, St2)
+
+plot(STC_Base_Map, raster = TRUE)
+
+lines(STC_Animal_Movement_Individuals.List.df$SW41$long, STC_Animal_Movement_Individuals.List.df$SW41$lat, col = "pink")
+lines(STC_Animal_Movement_Individuals.List.df$SW23$long, STC_Animal_Movement_Individuals.List.df$SW23$lat, col = "black")
+lines(STC_Animal_Movement_Individuals.List.df$SW25$long, STC_Animal_Movement_Individuals.List.df$SW25$lat, col = "purple")
+lines(STC_Animal_Movement_Individuals.List.df$SW16$long, STC_Animal_Movement_Individuals.List.df$SW16$lat, col = "red")
+lines(STC_Animal_Movement_Individuals.List.df$SW17$long, STC_Animal_Movement_Individuals.List.df$SW17$lat, col = "orange")
+lines(STC_Animal_Movement_Individuals.List.df$SW27$long, STC_Animal_Movement_Individuals.List.df$SW27$lat, col = "green")
+lines(STC_Animal_Movement_Individuals.List.df$SW31$long, STC_Animal_Movement_Individuals.List.df$SW31$lat, col = "yellow")
+lines(STC_Animal_Movement_Individuals.List.df$SW41$long, STC_Animal_Movement_Individuals.List.df$SW41$lat, col = "pink")
+plot(Animal_Movement_KDE_part_1)
+
+points(STC_Interactions_subset$long,STC_Interactions_subset$lat, col = "blue", pch = 8)
+
+title(main = "Seven Individual Swainson's Hawks with Interactions", line = +3, col.main = "red", cex.main = 0.8)
+mtext(side = 1, "period: 1996/05/01 - 1997/05/01", line = 1, col = "red", cex = 0.8)
+
+
+Animal_Movement_KDE_part_1 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df1$long,STC_Animal_Movement_time_period_KDE_subset.df1$lat),ncol = 2))
+Animal_Movement_KDE_part_2 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df2$long,STC_Animal_Movement_time_period_KDE_subset.df2$lat),ncol = 2))
+Animal_Movement_KDE_part_3 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df3$long,STC_Animal_Movement_time_period_KDE_subset.df3$lat),ncol = 2))
+Animal_Movement_KDE_part_4 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df4$long,STC_Animal_Movement_time_period_KDE_subset.df4$lat),ncol = 2))
+Animal_Movement_KDE_part_5 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df5$long,STC_Animal_Movement_time_period_KDE_subset.df5$lat),ncol = 2))
+Animal_Movement_KDE_part_6 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df6$long,STC_Animal_Movement_time_period_KDE_subset.df6$lat),ncol = 2))
+Animal_Movement_KDE_part_7 <- kde(x = matrix(data = c(STC_Animal_Movement_time_period_KDE_subset.df7$long,STC_Animal_Movement_time_period_KDE_subset.df7$lat),ncol = 2))
+
+plot(Animal_Movement_KDE_part_1, col = "green",add = TRUE)
+plot(Animal_Movement_KDE_part_2, col = "green",add = TRUE)
+plot(Animal_Movement_KDE_part_3, col = "green",add = TRUE)
+plot(Animal_Movement_KDE_part_4, col = "green",add = TRUE)
+plot(Animal_Movement_KDE_part_5, col = "green",add = TRUE)
+plot(Animal_Movement_KDE_part_6, col = "green",add = TRUE)
+plot(Animal_Movement_KDE_part_7, col = "green",add = TRUE)
+
+
+
+STC_2D_Background_Visualization(
+  map = STC_Base_Map,
+  points =
+    STC_Animal_Movement_time_period_subset.df,
+  outliers = STC_Outliers,
+  interactions = STC_Interactions,
+  colP = "red",
+  colO = "yellow",
+  colI = "blue",
+  title = STC_Title,
+  subtitle = subtitle,
+  coltext = "white"
+)
 
